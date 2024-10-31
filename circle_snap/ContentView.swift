@@ -26,7 +26,7 @@ struct ContentView: View {
 
 struct CircleLoopView: View {
     @State private var rotationAngle: Double = 0
-    @State private var animationSpeed: Double = 5
+    @State private var animationSpeed: Double = 2
     // Random angle for the node position
     @State private var randomNodeAngle: Double = Double.random(in: 0..<360)
     // Smooth the circle jumping round
@@ -49,7 +49,7 @@ struct CircleLoopView: View {
     @State private var lastSuccessRect: Double = 2
 
 
-    let timerInterval: TimeInterval = 0.001 // Timer interval in seconds
+    let timerInterval: TimeInterval = 0.0001 // Timer interval in seconds
 
 
     
@@ -77,20 +77,40 @@ struct CircleLoopView: View {
                 .onTapGesture {
                     checkAlignmentAndAnimate()
                 }
-            
+        
+            // for testing to show tolerance
+//            Rectangle()
+//                .frame(width: 20, height: 10)
+//                .foregroundColor(.blue)
+//                .offset(x: circleRadius * cos(redCircleStartAngle * .pi / 180) + shakeOffset,
+//                        y: circleRadius * sin(redCircleStartAngle * .pi / 180))
+//            Rectangle()
+//                .frame(width: 20, height: 10)
+//                .foregroundColor(.blue)
+//                .offset(x: circleRadius * cos(redCircleEndAngle * .pi / 180) + shakeOffset,
+//                        y: circleRadius * sin(redCircleEndAngle * .pi / 180))
+//            Rectangle()
+//                .frame(width: 20, height: 10)
+//                .foregroundColor(.blue)
+//                .offset(x: circleRadius * cos(180 * .pi / 180) + shakeOffset,
+//                        y: circleRadius * sin(180 * .pi / 180))
+      
             // looping bar
             Rectangle()
-                .frame(width: 20, height: 10)
+                .frame(width: 15, height: 15)
                 .foregroundColor(.blue)
-                .offset(x: circleRadius)
-                .rotationEffect(.degrees(rotationAngle))
-                .animation(
-                    .linear(duration: animationSpeed)
-                    .repeatForever(autoreverses: false),
-                    value: rotationAngle
-                )
+                .offset(x: circleRadius * cos((progress*360) * .pi / 180) + shakeOffset,
+                    y: circleRadius * sin((progress*360) * .pi / 180))
+                
 
-//   // for testing
+                //.rotationEffect(.degrees(progress*360 * 90))
+//                .animation(
+//                    .linear(duration: animationSpeed)
+//                    .repeatForever(autoreverses: false),
+//                    value: rotationAngle
+//                )
+
+   // for testing
 //            VStack {
 //                Text("Current Progress: \(Int(progress * 360))%")
 //                    .font(.headline)
@@ -125,7 +145,7 @@ struct CircleLoopView: View {
     }
     
     private func calculateAngleTolerance() -> Double {
-            return ((Double(nodeRadius) / Double(circleRadius)) * 180 / .pi) * 1.5
+        return ((Double(nodeRadius) / Double(circleRadius)) * 180 / .pi) * 1.75
         }
 
     // Recalculate angle tolerance when nodeRadius or circleRadius changes
@@ -147,10 +167,7 @@ struct CircleLoopView: View {
         redCircleEndAngle = normalizeAngle(redCircleEndAngle)
 
         // Adjust rectangle angle and normalize it within 0-360
-        let rectangleAngle = progress * 360
-        let adjustedRectangleAngle = (rectangleAngle -25).truncatingRemainder(dividingBy: 360)
-        let normalizedRectangleAngle = adjustedRectangleAngle < 0 ? adjustedRectangleAngle + 360 : adjustedRectangleAngle
-            
+        let normalizedRectangleAngle = normalizeAngle((progress * 360))
         // Check if the rectangle angle is within the red circle's range
         let inRange: Bool
         if redCircleStartAngle < redCircleEndAngle {
@@ -164,12 +181,28 @@ struct CircleLoopView: View {
         return inRange
     }
     
+    func isRectangleInRedCircle() -> Bool {
+        // Calculate the rectangle's center position
+        let rectangleCenterX = circleRadius * cos((progress*360) * .pi / 180)
+        let rectangleCenterY = circleRadius * sin((progress*360) * .pi / 180)
+
+        // Calculate the position of the red circle
+        let redCircleCenterX = circleRadius * cos(randomNodeAngle * .pi / 180)
+        let redCircleCenterY = circleRadius * sin(randomNodeAngle * .pi / 180)
+
+        // Calculate the distance between the rectangle center and the red circle center
+        let distance = sqrt(pow(rectangleCenterX - redCircleCenterX, 2) + pow(rectangleCenterY - redCircleCenterY, 2))
+
+        // Check if the distance is less than or equal to the radius of the red circle
+        return distance <= (nodeRadius / 2 + 10) // Adding a tolerance (10) for the rectangle width/height
+    }
+    
     func checkAlignmentAndAnimate() {
         // Calculate the angle tolerance based on the red circle's radius
-       
+        let inRange = isRectangleInRange()
         clickedOn = progress
         // Trigger animation if within range
-        if isGlowing {
+        if inRange {
             lastSuccessRect = progress // Track the clicked position
             lastSuccessNode = randomNodeAngle
 
@@ -210,12 +243,9 @@ struct CircleLoopView: View {
                 let elapsedTime = Date().timeIntervalSince(startTime)
                 let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: animationSpeed) / animationSpeed
                 progress = cycleProgress
-                let inRange = isRectangleInRange();
-                if(inRange){
-                    isGlowing = true;
-                }else{
-                    isGlowing = false;
-                }
+                isGlowing = isRectangleInRange();
+              
+              
         }
     }
 }
