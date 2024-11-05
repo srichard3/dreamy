@@ -4,7 +4,8 @@ import Combine
 // ViewModel to manage the game's state and logic, including the timer and game actions.
 class CSViewModel: ObservableObject {
     @Published var gameState = GameState() // Observable game state object to manage UI updates
-    private var timer: AnyCancellable? // Timer to manage animation cycle
+    private var rotationTimer: AnyCancellable?
+    private var countdownTimer: AnyCancellable?
     private let angleTolerance: Double // Tolerance for alignment detection
     
     // Debug properties to visualize the start and end angles for the active zone
@@ -31,7 +32,11 @@ class CSViewModel: ObservableObject {
     // Starts the rotation animation timer, updating `progress` based on elapsed time.
     private func startRotation() {
         let startTime = Date()
-        timer = Timer.publish(every: GameConstants.timerInterval, on: .main, in: .common)
+        
+        // Invalidate existing rotation timer to avoid duplicate timers
+        rotationTimer?.cancel()
+        
+        rotationTimer = Timer.publish(every: GameConstants.timerInterval, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -60,10 +65,10 @@ class CSViewModel: ObservableObject {
         gameState.gameTimer = 10
         
         // Invalidate any existing timer to avoid duplicate timers
-        timer?.cancel()
+        countdownTimer?.cancel()
         
         // Start a new timer that updates every second
-        timer = Timer.publish(every: 1, on: .main, in: .common)
+        countdownTimer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -79,6 +84,7 @@ class CSViewModel: ObservableObject {
     
     // calls success or failure handlers based on alignment.
     func handleTap() {
+        startCountdown()
         if isRectangleInRange() {
             handleSuccessfulTap()
         } else {
@@ -173,7 +179,8 @@ class CSViewModel: ObservableObject {
         
         // Cancels the timer when the ViewModel is deinitialized.
         deinit {
-            timer?.cancel()
+            rotationTimer?.cancel()
+            countdownTimer?.cancel()
         }
     }
 
