@@ -53,7 +53,7 @@ class CSViewModel: ObservableObject {
             : normalizedProgress >= startAngle || normalizedProgress <= endAngle
     }
     
-    func checkAlignmentAndAnimate() {
+    func handleTap() {
         if isRectangleInRange() {
             handleSuccessfulTap()
         } else {

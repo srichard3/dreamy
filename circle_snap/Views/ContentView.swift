@@ -10,10 +10,19 @@ import Combine
 
 
 struct ContentView: View {
+    @StateObject private var viewModel = CSViewModel()
+
     var body: some View {
         VStack {
-            
-            CSView()
+            ScoreView(viewModel: viewModel)
+                .padding(50)
+            CSView(viewModel: viewModel)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity) // Make VStack fill screen
+        .contentShape(Rectangle()) // Make entire area tappable
+
+        .onTapGesture {
+            viewModel.handleTap()
         }
     }
 }

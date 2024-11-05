@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct ScoreView: View {
-    let score: Int
+    @ObservedObject var viewModel: CSViewModel
+    
     var body: some View {
-        Text("Score: " + String(score))
+        Text("Score: \(viewModel.gameState.score)")
     }
 }

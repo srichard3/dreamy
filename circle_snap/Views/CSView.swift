@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct CSView: View {
-    @StateObject private var viewModel = CSViewModel()
+    @ObservedObject var viewModel: CSViewModel
     
     var body: some View {
         ZStack {
@@ -17,7 +17,7 @@ struct CSView: View {
                 scale: viewModel.gameState.scale,
                 offset: viewModel.gameState.shakeOffset,
                 isGlowing: viewModel.gameState.isGlowing,
-                onTap: viewModel.checkAlignmentAndAnimate
+                onTap: viewModel.handleTap
             )
             MovingIndicatorView(progress: viewModel.gameState.progress)
             
