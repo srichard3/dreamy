@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         if viewModel.gameState.isGameOver {
             VStack {
-                GameOverView()
+                GameOverView(viewModel: viewModel)
             }
         } else {
             VStack {
