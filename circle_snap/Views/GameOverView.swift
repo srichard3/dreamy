@@ -20,6 +20,7 @@ struct GameOverView: View {
             viewModel.gameState.combo = 0
             viewModel.gameState.highestCombo = 0
             viewModel.gameState.lastHitAccuracy = ""
+            viewModel.gameState.lives = 3
         }
     }
 }
