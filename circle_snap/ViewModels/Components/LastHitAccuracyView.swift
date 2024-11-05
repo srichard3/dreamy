@@ -1,5 +1,5 @@
 //
-//  ComboView.swift
+//  LastHitAccuracy.swift
 //  circle_snap
 //
 //  Created by Duy Nguyen on 11/4/24.
@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-struct ComboView: View {
+struct LastHitAccuracyView: View {
     @ObservedObject var viewModel: CSViewModel
     
     var body: some View {
-        Text("\(viewModel.gameState.combo)")
-            .font(.system(size: 30, weight: .bold))
+        Text("\(viewModel.gameState.lastHitAccuracy)")
     }
 }

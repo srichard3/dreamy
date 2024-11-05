@@ -14,9 +14,11 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            ScoreView(viewModel: viewModel)
-                .padding(50)
+            GameInfoView(viewModel: viewModel)
+            LastHitAccuracyView(viewModel: viewModel)
+                .padding(.vertical, 20)
             CSView(viewModel: viewModel)
+            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity) // Make VStack fill screen
         .contentShape(Rectangle()) // Make entire area tappable

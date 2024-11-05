@@ -10,7 +10,7 @@ import SwiftUI
 struct CircleTrackView: View {
     var body: some View {
         Circle()
-            .stroke(Color.gray.opacity(0.5), lineWidth: 2)
+            .stroke(Color.gray.opacity(0.5), lineWidth: 40)
             .frame(width: 300, height: 300)
     }
 }
