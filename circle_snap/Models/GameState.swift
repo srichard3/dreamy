@@ -15,4 +15,6 @@ struct GameState {
     var shakeOffset: CGFloat = 0
     var isGlowing: Bool = false
     var lastClickProgress: Double = 0.0
+    
+    var lives: Int = 3
 }

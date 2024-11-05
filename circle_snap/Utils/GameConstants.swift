@@ -14,4 +14,6 @@ struct GameConstants {
     static let timerInterval: TimeInterval = 0.0001
     static let shakeDuration: Double = 0.05
     static let scaleAnimationDuration: Double = 0.2
+    
+    
 }
