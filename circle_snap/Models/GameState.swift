@@ -22,4 +22,6 @@ struct GameState {
     var lastHitAccuracy: String = ""
     
     var lives: Int = 3
+    
+    var gameTimer: Int = 10
 }
