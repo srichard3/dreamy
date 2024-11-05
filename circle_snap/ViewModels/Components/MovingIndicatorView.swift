@@ -38,9 +38,9 @@ struct IndicatorShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         
-        let width: CGFloat = 7
-        let height: CGFloat = 42
-        let cornerRadius: CGFloat = 5
+        let width: CGFloat = 8
+        let height: CGFloat = 45
+        let cornerRadius: CGFloat = 10
         
         let startX = rect.midX - width / 2
         let startY = rect.midY - height / 2

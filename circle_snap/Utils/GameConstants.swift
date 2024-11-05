@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GameConstants {
     static let circleRadius: CGFloat = 155.0
-    static let nodeRadius: CGFloat = 21.5
+    static let nodeRadius: CGFloat = 22
     static let animationSpeed: Double = 4
     static let timerInterval: TimeInterval = 0.0001
     static let shakeDuration: Double = 0.05
