@@ -26,4 +26,6 @@ struct GameState {
     
     var gameTimer: Int = 10
     var timer: AnyCancellable?
+    
+    var isGameOver: Bool = false
 }

@@ -8,25 +8,29 @@
 import SwiftUI
 import Combine
 
-
 struct ContentView: View {
     @StateObject private var viewModel = CSViewModel()
 
     var body: some View {
-        VStack {
-            GameInfoView(viewModel: viewModel)
-            LastHitAccuracyView(lastHitAccuracy: viewModel.gameState.lastHitAccuracy)
-                .padding(.vertical, 20)
-            CSView(viewModel: viewModel)
-            Spacer()
-            GameTimerView(gameTimer: viewModel.gameState.gameTimer)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity) // Make VStack fill screen
-        .contentShape(Rectangle()) // Make entire area tappable
-        .background(Color("MainBackground"))
-
-        .onTapGesture {
-            viewModel.handleTap()
+        if viewModel.gameState.isGameOver {
+            VStack {
+                GameOverView()
+            }
+        } else {
+            VStack {
+                GameInfoView(viewModel: viewModel)
+                LastHitAccuracyView(lastHitAccuracy: viewModel.gameState.lastHitAccuracy)
+                    .padding(.vertical, 20)
+                CSView(viewModel: viewModel)
+                Spacer()
+                GameTimerView(gameTimer: viewModel.gameState.gameTimer)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity) // make VStack fill screen
+            .contentShape(Rectangle()) // make entire area tappable
+            .background(Color("MainBackground"))
+            .onTapGesture {
+                viewModel.handleTap()
+            }
         }
     }
 }
@@ -34,3 +38,4 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
