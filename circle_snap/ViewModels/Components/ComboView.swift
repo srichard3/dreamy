@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ComboView: View {
-    @ObservedObject var viewModel: CSViewModel
+    let combo: Int
     
     var body: some View {
-        Text("\(viewModel.gameState.combo)")
+        Text("\(combo)")
             .font(.system(size: 30, weight: .bold))
+            .foregroundColor(.white)
+
     }
 }

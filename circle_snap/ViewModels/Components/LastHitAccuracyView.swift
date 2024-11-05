@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct LastHitAccuracyView: View {
-    @ObservedObject var viewModel: CSViewModel
+    let lastHitAccuracy: String
     
     var body: some View {
-        Text("\(viewModel.gameState.lastHitAccuracy)")
+        Text(lastHitAccuracy)
+            .font(.system(size: 25, weight: .bold))
+            .foregroundColor(.white)
+
     }
 }

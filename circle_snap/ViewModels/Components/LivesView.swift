@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct LivesView: View {
-    @ObservedObject var viewModel: CSViewModel
+    let lives: Int
     
     var body: some View {
-        Text("Lives: \(viewModel.gameState.lives)")
+        Text("Lives: \(lives)")
+            .font(.system(size: 25, weight: .bold))
+            .foregroundColor(.white)
     }
 }

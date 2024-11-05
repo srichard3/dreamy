@@ -12,14 +12,14 @@ struct GameInfoView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            ScoreView(viewModel: viewModel)
+            ScoreView(score: viewModel.gameState.score)
                 .padding(.vertical, 20)
             
             HStack {
-                LivesView(viewModel: viewModel)
+                LivesView(lives: viewModel.gameState.lives)
                     
                 Spacer()
-                HighestComboView(viewModel: viewModel)
+                HighestComboView(highestCombo: viewModel.gameState.highestCombo)
                     
             }
             .padding(.horizontal, 20)
@@ -33,6 +33,5 @@ struct GameInfoView: View {
         )
         .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 5) // Subtle shadow
         .padding(.horizontal, 20)
-        .padding(.vertical, 20)
     }
 }

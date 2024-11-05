@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct HighestComboView: View {
-    @ObservedObject var viewModel: CSViewModel
+    let highestCombo: Int
     
     var body: some View {
-        Text("Highest Combo: \(viewModel.gameState.highestCombo)")
+        Text("Highest: \(highestCombo)")
+            .font(.system(size: 25, weight: .bold))
+            .foregroundColor(.white)
+
     }
 }
