@@ -123,6 +123,15 @@ class CSViewModel: ObservableObject {
     private func handleFailedTap() {
         gameState.combo = 0  // Reset combo on miss
         
+        // TODO
+//        if gameState.lives <= 0 {
+//            handle fail state
+//        } else {
+//            gameState.lives -= 1 {
+//                
+//            }
+//        }
+        
         withAnimation(Animation.easeInOut(duration: GameConstants.shakeDuration).repeatCount(3, autoreverses: true)) {
             gameState.scale = 0.95
             gameState.shakeOffset = 10

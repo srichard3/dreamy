@@ -20,4 +20,5 @@ struct GameState {
     var combo: Int = 0
     var highestCombo: Int = 0
     var lastHitAccuracy: String = ""
+    var lives: Int = 3
 }
