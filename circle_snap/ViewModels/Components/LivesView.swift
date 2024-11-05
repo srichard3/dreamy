@@ -1,5 +1,5 @@
 //
-//  ScoreView.swift
+//  LivesView.swift
 //  circle_snap
 //
 //  Created by Duy Nguyen on 11/4/24.
@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-struct ScoreView: View {
-    let score: Int
+struct LivesView: View {
+    let lives: Int
     
     var body: some View {
-        Text("Score: \(score)")
+        Text("Lives: \(lives)")
             .font(.system(size: 25, weight: .bold))
             .foregroundColor(.white)
-
     }
 }

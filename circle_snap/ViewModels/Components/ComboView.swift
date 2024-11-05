@@ -1,5 +1,5 @@
 //
-//  ScoreView.swift
+//  ComboView.swift
 //  circle_snap
 //
 //  Created by Duy Nguyen on 11/4/24.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct ScoreView: View {
-    let score: Int
+struct ComboView: View {
+    let combo: Int
     
     var body: some View {
-        Text("Score: \(score)")
-            .font(.system(size: 25, weight: .bold))
+        Text("\(combo)")
+            .font(.system(size: 30, weight: .bold))
             .foregroundColor(.white)
 
     }

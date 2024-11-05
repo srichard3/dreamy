@@ -12,6 +12,7 @@ struct CSView: View {
     var body: some View {
         ZStack {
             CircleTrackView()
+            ComboView(combo: viewModel.gameState.combo)
             TargetNodeView(
                 angle: viewModel.gameState.randomNodeAngle,
                 scale: viewModel.gameState.scale,
