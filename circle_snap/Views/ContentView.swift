@@ -19,6 +19,7 @@ struct ContentView: View {
                 .padding(.vertical, 20)
             CSView(viewModel: viewModel)
             Spacer()
+            GameTimerView(gameTimer: viewModel.gameState.gameTimer)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity) // Make VStack fill screen
         .contentShape(Rectangle()) // Make entire area tappable
