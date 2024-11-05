@@ -121,6 +121,7 @@ class CSViewModel: ObservableObject {
     
     // Handles a failed tap, triggering a shaking animation to indicate incorrect alignment.
     private func handleFailedTap() {
+
         gameState.combo = 0  // Reset combo on miss
         
         // TODO
@@ -129,9 +130,13 @@ class CSViewModel: ObservableObject {
 //        } else {
 //            gameState.lives -= 1 {
 //                
+//          }
+//        }
+//
 //            }
 //        }
-        
+
+
         withAnimation(Animation.easeInOut(duration: GameConstants.shakeDuration).repeatCount(3, autoreverses: true)) {
             gameState.scale = 0.95
             gameState.shakeOffset = 10
