@@ -17,20 +17,7 @@ struct ContentView: View {
                 GameOverView(viewModel: viewModel)
             }
         } else {
-            VStack {
-                GameInfoView(viewModel: viewModel)
-                LastHitAccuracyView(lastHitAccuracy: viewModel.gameState.lastHitAccuracy)
-                    .padding(.vertical, 20)
-                CSView(viewModel: viewModel)
-                Spacer()
-                GameTimerView(gameTimer: viewModel.gameState.gameTimer)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity) // make VStack fill screen
-            .contentShape(Rectangle()) // make entire area tappable
-            .background(Color("MainBackground"))
-            .onTapGesture {
-                viewModel.handleTap()
-            }
+            StartView()
         }
     }
 }
