@@ -4,9 +4,11 @@ import Combine
 // ViewModel to manage the game's state and logic, including the timer and game actions.
 class CSViewModel: ObservableObject {
     @Published var gameState = GameState() // Observable game state object to manage UI updates
-    private var timer: AnyCancellable? // Timer to manage animation cycle
+    @Published var gameStatus: GameStatus = .notStarted
+    private var rotationTimer: AnyCancellable?
+    private var countdownTimer: AnyCancellable?
     private let angleTolerance: Double // Tolerance for alignment detection
-
+    
     // Debug properties to visualize the start and end angles for the active zone
     var debugStartAngle: Double { normalizeAngle(gameState.randomNodeAngle - angleTolerance) }
     var debugEndAngle: Double { normalizeAngle(gameState.randomNodeAngle + angleTolerance) }
@@ -18,17 +20,24 @@ class CSViewModel: ObservableObject {
     
     func onAppear() {
         startRotation()
+        startCountdown()
     }
+    
     
     // Calculates the tolerance angle based on the radius of the node and circle.
     private static func calculateAngleTolerance() -> Double {
         return ((Double(GameConstants.nodeRadius) / Double(GameConstants.circleRadius)) * 180 / .pi) * 1.75
     }
     
+    
     // Starts the rotation animation timer, updating `progress` based on elapsed time.
     private func startRotation() {
         let startTime = Date()
-        timer = Timer.publish(every: GameConstants.timerInterval, on: .main, in: .common)
+        
+        // Invalidate existing rotation timer to avoid duplicate timers
+        rotationTimer?.cancel()
+        
+        rotationTimer = Timer.publish(every: GameConstants.timerInterval, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -47,8 +56,31 @@ class CSViewModel: ObservableObject {
         
         // Determines if the progress angle falls within the specified tolerance range
         return startAngle < endAngle
-            ? normalizedProgress >= startAngle && normalizedProgress <= endAngle
-            : normalizedProgress >= startAngle || normalizedProgress <= endAngle
+        ? normalizedProgress >= startAngle && normalizedProgress <= endAngle
+        : normalizedProgress >= startAngle || normalizedProgress <= endAngle
+    }
+    
+    
+    func startCountdown() {
+        // Reset the countdown timer
+        gameState.gameTimer = 10
+        
+        // Invalidate any existing timer to avoid duplicate timers
+        countdownTimer?.cancel()
+        
+        // Start a new timer that updates every second
+        countdownTimer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                
+                // Decrease the countdown, if it reaches 0, handle timeout
+                if self.gameState.gameTimer > 0 {
+                    self.gameState.gameTimer -= 1
+                } else {
+                    self.handleFailedTap() // treat as a failed tap
+                }
+            }
     }
     
     // calls success or failure handlers based on alignment.
@@ -58,7 +90,9 @@ class CSViewModel: ObservableObject {
         } else {
             handleFailedTap()
         }
+        startCountdown()
     }
+    
     
     // Handles a successful tap, triggering animations and updating the node position.
     private func handleSuccessfulTap() {
@@ -95,69 +129,58 @@ class CSViewModel: ObservableObject {
     }
     
     private func calculateAccuracy(_ angleDifference: Double) -> String {
-        if angleDifference <= 5 {
-            return "PERFECT!"
-        } else if angleDifference <= 10 {
-            return "Great!"
-        } else if angleDifference <= 15 {
-            return "Good"
-        } else {
-            return "OK"
-        }
+        if angleDifference <= 5 { return "PERFECT!" }
+        else if angleDifference <= 10 { return "Great!" }
+        else if angleDifference <= 15 { return "Good" }
+        else { return "OK" }
     }
     
     private func calculateBasePoints(_ accuracy: String) -> Int {
         switch accuracy {
-        case "PERFECT!":
-            return 100
-        case "Great!":
-            return 75
-        case "Good":
-            return 50
-        default:
-            return 25
+        case "PERFECT!": return 100
+        case "Great!": return 75
+        case "Good": return 50
+        default: return 25
         }
     }
     
     // Handles a failed tap, triggering a shaking animation to indicate incorrect alignment.
     private func handleFailedTap() {
-
         gameState.combo = 0  // Reset combo on miss
         
-        // TODO
-//        if gameState.lives <= 0 {
-//            handle fail state
-//        } else {
-//            gameState.lives -= 1 {
-//                
-//          }
-//        }
-//
-//            }
-//        }
-
-
-        withAnimation(Animation.easeInOut(duration: GameConstants.shakeDuration).repeatCount(3, autoreverses: true)) {
-            gameState.scale = 0.95
-            gameState.shakeOffset = 10
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            withAnimation {
-                self.gameState.scale = 1.0
-                self.gameState.shakeOffset = 0
+        if gameState.lives <= 1  {
+            gameStatus = .gameOver
+            countdownTimer?.cancel()
+        } else {
+            gameState.lives -= 1
+                startCountdown()
+            }
+            
+            withAnimation(Animation.easeInOut(duration: GameConstants.shakeDuration).repeatCount(3, autoreverses: true)) {
+                gameState.scale = 0.95
+                gameState.shakeOffset = 10
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                withAnimation {
+                    self.gameState.scale = 1.0
+                    self.gameState.shakeOffset = 0
+                }
             }
         }
+        
+        
+        // Normalizes an angle to fall within the 0-360° range.
+        private func normalizeAngle(_ angle: Double) -> Double {
+            var normalized = angle.truncatingRemainder(dividingBy: 360)
+            if normalized < 0 { normalized += 360 }
+            return normalized
+        }
+        
+        // Cancels the timer when the ViewModel is deinitialized.
+        deinit {
+            rotationTimer?.cancel()
+            countdownTimer?.cancel()
+        }
     }
-    // Normalizes an angle to fall within the 0-360° range.
-    private func normalizeAngle(_ angle: Double) -> Double {
-        var normalized = angle.truncatingRemainder(dividingBy: 360)
-        if normalized < 0 { normalized += 360 }
-        return normalized
-    }
-    
-    // Cancels the timer when the ViewModel is deinitialized.
-    deinit {
-        timer?.cancel()
-    }
-}
+

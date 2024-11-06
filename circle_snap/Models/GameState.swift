@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct GameState {
     var progress: Double = 0.0
@@ -22,4 +23,11 @@ struct GameState {
     var lastHitAccuracy: String = ""
     
     var lives: Int = 3
+    
+    var gameTimer: Int = 10
+    var timer: AnyCancellable?
+}
+
+enum GameStatus {
+    case gameOver, inProgress, notStarted
 }
