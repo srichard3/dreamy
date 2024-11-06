@@ -15,7 +15,7 @@ struct GameOverView: View {
             .foregroundColor(.red)
         // reset all game state variables
         Button("Play Again") {
-            viewModel.gameState.isGameOver = false
+            viewModel.gameStatus = .inProgress
             viewModel.gameState.score = 0
             viewModel.gameState.combo = 0
             viewModel.gameState.highestCombo = 0

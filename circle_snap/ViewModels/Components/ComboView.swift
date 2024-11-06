@@ -12,8 +12,8 @@ struct ComboView: View {
     
     var body: some View {
         Text("\(combo)")
-            .font(.system(size: 30, weight: .bold))
-            .foregroundColor(.white)
-
+            .font(.system(size: 30))
+            .bold()
+            .foregroundColor(Color.white)
     }
 }

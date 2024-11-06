@@ -4,6 +4,7 @@ import Combine
 // ViewModel to manage the game's state and logic, including the timer and game actions.
 class CSViewModel: ObservableObject {
     @Published var gameState = GameState() // Observable game state object to manage UI updates
+    @Published var gameStatus: GameStatus = .notStarted
     private var rotationTimer: AnyCancellable?
     private var countdownTimer: AnyCancellable?
     private let angleTolerance: Double // Tolerance for alignment detection
@@ -84,12 +85,12 @@ class CSViewModel: ObservableObject {
     
     // calls success or failure handlers based on alignment.
     func handleTap() {
-        startCountdown()
         if isRectangleInRange() {
             handleSuccessfulTap()
         } else {
             handleFailedTap()
         }
+        startCountdown()
     }
     
     
@@ -147,8 +148,9 @@ class CSViewModel: ObservableObject {
     private func handleFailedTap() {
         gameState.combo = 0  // Reset combo on miss
         
-        if gameState.lives <= 0 {
-            gameState.isGameOver = true
+        if gameState.lives <= 1  {
+            gameStatus = .gameOver
+            countdownTimer?.cancel()
         } else {
             gameState.lives -= 1
                 startCountdown()
