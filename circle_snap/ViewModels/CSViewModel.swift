@@ -8,6 +8,9 @@ class CSViewModel: ObservableObject {
     private var rotationTimer: AnyCancellable?
     private var countdownTimer: AnyCancellable?
     private let angleTolerance: Double // Tolerance for alignment detection
+    private var displayLink: CADisplayLink? // CADisplayLink for syncing with screen refresh rate
+        private var startTime: CFTimeInterval? // Track the start time of the animation
+        
     
     // Debug properties to visualize the start and end angles for the active zone
     var debugStartAngle: Double { normalizeAngle(gameState.randomNodeAngle - angleTolerance) }
@@ -32,20 +35,19 @@ class CSViewModel: ObservableObject {
     
     // Starts the rotation animation timer, updating `progress` based on elapsed time.
     private func startRotation() {
-        let startTime = Date()
-        
-        // Invalidate existing rotation timer to avoid duplicate timers
-        rotationTimer?.cancel()
-        
-        rotationTimer = Timer.publish(every: GameConstants.timerInterval, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                let elapsedTime = Date().timeIntervalSince(startTime)
-                let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: GameConstants.animationSpeed) / GameConstants.animationSpeed
-                self.gameState.progress = cycleProgress // Update animation progress
-                self.gameState.isGlowing = self.isRectangleInRange() // Set glowing effect based on alignment
-            }
+        startTime = CACurrentMediaTime() // Track the start time when rotation begins
+        displayLink = CADisplayLink(target: self, selector: #selector(updateRotation))
+        displayLink?.add(to: .current, forMode: .common)
+    }
+    
+    // Called by CADisplayLink to update the game state on each frame.
+    @objc private func updateRotation() {
+        guard let startTime = startTime else { return } // Ensure startTime is set
+            
+        let elapsedTime = CACurrentMediaTime() - startTime
+        let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: GameConstants.animationSpeed) / GameConstants.animationSpeed
+        gameState.progress = cycleProgress // Update animation progress
+        gameState.isGlowing = isRectangleInRange() // Update glow effect only when near target
     }
     
     // Checks if the rotating rectangle is within the success range of the node's angle.
@@ -179,7 +181,7 @@ class CSViewModel: ObservableObject {
         
         // Cancels the timer when the ViewModel is deinitialized.
         deinit {
-            rotationTimer?.cancel()
+            displayLink?.invalidate() // Stop the display link when the ViewModel is deallocated
             countdownTimer?.cancel()
         }
     }
