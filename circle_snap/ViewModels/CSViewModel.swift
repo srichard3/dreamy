@@ -45,7 +45,7 @@ class CSViewModel: ObservableObject {
         guard let startTime = startTime else { return } // Ensure startTime is set
             
         let elapsedTime = CACurrentMediaTime() - startTime
-        let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: GameConstants.animationSpeed) / GameConstants.animationSpeed
+        let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: gameState.animationSpeed) / gameState.animationSpeed
         gameState.progress = cycleProgress // Update animation progress
         gameState.isGlowing = isRectangleInRange() // Update glow effect only when near target
     }
@@ -98,7 +98,9 @@ class CSViewModel: ObservableObject {
     
     // Handles a successful tap, triggering animations and updating the node position.
     private func handleSuccessfulTap() {
+        speedUpOnSuccessfulTap()
         gameState.lastClickProgress = gameState.progress
+        
         
         // Calculate accuracy based on how close to the center of the target range
         let normalizedProgress = normalizeAngle(gameState.progress * 360)
@@ -172,17 +174,37 @@ class CSViewModel: ObservableObject {
         }
         
         
-        // Normalizes an angle to fall within the 0-360° range.
-        private func normalizeAngle(_ angle: Double) -> Double {
-            var normalized = angle.truncatingRemainder(dividingBy: 360)
-            if normalized < 0 { normalized += 360 }
-            return normalized
-        }
-        
-        // Cancels the timer when the ViewModel is deinitialized.
-        deinit {
-            displayLink?.invalidate() // Stop the display link when the ViewModel is deallocated
-            countdownTimer?.cancel()
-        }
+    // Normalizes an angle to fall within the 0-360° range.
+    private func normalizeAngle(_ angle: Double) -> Double {
+        var normalized = angle.truncatingRemainder(dividingBy: 360)
+        if normalized < 0 { normalized += 360 }
+        return normalized
     }
+
+    private func speedUpOnSuccessfulTap() {
+        if (gameState.animationSpeed > 2) {
+            // current elapsed time based on the current progress and speed
+            guard let startTime = startTime else { return }
+            
+            // calculate elapsed time with the current animation speed
+            let elapsedTime = CACurrentMediaTime() - startTime
+            let currentProgress = elapsedTime.truncatingRemainder(dividingBy: gameState.animationSpeed) / gameState.animationSpeed
+            
+            gameState.animationSpeed -= GameConstants.speedUpModifier
+            
+            // adjust startTime so the rotation progress stays the same
+            let adjustedElapsedTime = currentProgress * gameState.animationSpeed
+            self.startTime = CACurrentMediaTime() - adjustedElapsedTime
+        }
+        return
+    }
+    
+    // Cancels the timer when the ViewModel is deinitialized.
+    deinit {
+        displayLink?.invalidate() // Stop the display link when the ViewModel is deallocated
+        countdownTimer?.cancel()
+    }
+}
+
+    
 

@@ -16,6 +16,7 @@ struct GameState {
     var isGlowing: Bool = false
     var lastClickProgress: Double = 0.0
     
+    
     // score system
     var score: Int = 0
     var combo: Int = 0
@@ -26,6 +27,10 @@ struct GameState {
     
     var gameTimer: Int = 10
     var timer: AnyCancellable?
+    
+    // modifiers
+    var animationSpeed: Double = 4
+
 }
 
 enum GameStatus {
