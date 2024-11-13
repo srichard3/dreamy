@@ -21,6 +21,7 @@ struct GameOverView: View {
             viewModel.gameState.highestCombo = 0
             viewModel.gameState.lastHitAccuracy = ""
             viewModel.gameState.lives = 3
+            viewModel.gameState.animationSpeed = 4
         }
     }
 }
