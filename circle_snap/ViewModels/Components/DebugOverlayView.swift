@@ -19,6 +19,6 @@ struct DebugOverlayView: View {
             Text("Range End: \(viewModel.debugEndAngle)°")
         }
         .font(.caption)
-        .foregroundColor(.black)
+        .foregroundColor(.white)
     }
 }

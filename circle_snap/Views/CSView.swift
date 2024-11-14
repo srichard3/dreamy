@@ -23,7 +23,7 @@ struct CSView: View {
             MovingIndicatorView(progress: viewModel.gameState.progress)
             
             // Uncomment for debugging
-            // DebugOverlayView(viewModel: viewModel)
+            //DebugOverlayView(viewModel: viewModel)
         }
         .onAppear {
             viewModel.onAppear()
