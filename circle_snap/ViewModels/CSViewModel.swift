@@ -5,11 +5,13 @@ import Combine
 class CSViewModel: ObservableObject {
     @Published var gameState = GameState() // Observable game state object to manage UI updates
     @Published var gameStatus: GameStatus = .notStarted
+    private var lastCycleProgress :Double = 0;
+    private var isReverse : Bool = false;
     private var rotationTimer: AnyCancellable?
     private var countdownTimer: AnyCancellable?
     private let angleTolerance: Double // Tolerance for alignment detection
     private var displayLink: CADisplayLink? // CADisplayLink for syncing with screen refresh rate
-        private var startTime: CFTimeInterval? // Track the start time of the animation
+    private var startTime: CFTimeInterval? // Track the start time of the animation
         
     
     // Debug properties to visualize the start and end angles for the active zone
@@ -42,12 +44,32 @@ class CSViewModel: ObservableObject {
     
     // Called by CADisplayLink to update the game state on each frame.
     @objc private func updateRotation() {
-        guard let startTime = startTime else { return } // Ensure startTime is set
-            
+        guard let startTime = startTime else { return }
         let elapsedTime = CACurrentMediaTime() - startTime
         let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: gameState.animationSpeed) / gameState.animationSpeed
-        gameState.progress = cycleProgress // Update animation progress
-        gameState.isGlowing = isRectangleInRange() // Update glow effect only when near target
+        // Calculate x as the difference in cycleProgress from the last frame
+        let x = cycleProgress - lastCycleProgress
+            
+        if isReverse {
+            // Subtract x for reverse movement
+            gameState.progress -= x
+        } else {
+            // Add x for forward movement
+            gameState.progress += x
+        }
+            
+        // Ensure progress remains within 0.0 to 1.0
+        gameState.progress = gameState.progress.truncatingRemainder(dividingBy: 1.0)
+            
+        // Adjust for negative values to keep within range
+        if gameState.progress < 0 {
+            gameState.progress += 1.0
+        }
+            
+        // Update lastCycleProgress for the next frame
+        lastCycleProgress = cycleProgress
+
+        gameState.isGlowing = isRectangleInRange()  // Update glow effect only when near target
     }
     
     // Checks if the rotating rectangle is within the success range of the node's angle.
@@ -100,7 +122,8 @@ class CSViewModel: ObservableObject {
     private func handleSuccessfulTap() {
         speedUpOnSuccessfulTap()
         gameState.lastClickProgress = gameState.progress
-        
+        // 50% change of reversing
+        isReverse = Bool.random()
         
         // Calculate accuracy based on how close to the center of the target range
         let normalizedProgress = normalizeAngle(gameState.progress * 360)
