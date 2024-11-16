@@ -87,7 +87,7 @@ class CSViewModel: ObservableObject {
     
     func startCountdown() {
         // Reset the countdown timer
-        gameState.gameTimer = 10
+        gameState.gameTimer = 5
         
         // Invalidate any existing timer to avoid duplicate timers
         countdownTimer?.cancel()

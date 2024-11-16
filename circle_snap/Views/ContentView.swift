@@ -10,6 +10,8 @@ import Combine
 
 struct ContentView: View {
     @StateObject private var viewModel = CSViewModel()
+    @StateObject private var fpsTracker = FPSTracker()
+
 
     var body: some View {
         switch viewModel.gameStatus {

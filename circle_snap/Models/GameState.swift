@@ -25,7 +25,7 @@ struct GameState {
     
     var lives: Int = 3
     
-    var gameTimer: Int = 10
+    var gameTimer: Int = 5
     var timer: AnyCancellable?
     
     // modifiers
