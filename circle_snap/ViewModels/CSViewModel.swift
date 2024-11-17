@@ -122,8 +122,7 @@ class CSViewModel: ObservableObject {
     private func handleSuccessfulTap() {
         speedUpOnSuccessfulTap()
         gameState.lastClickProgress = gameState.progress
-        // 50% change of reversing
-        isReverse = Bool.random()
+        isReverse = !isReverse
         
         // Calculate accuracy based on how close to the center of the target range
         let normalizedProgress = normalizeAngle(gameState.progress * 360)
@@ -148,7 +147,14 @@ class CSViewModel: ObservableObject {
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + GameConstants.scaleAnimationDuration) {
-            self.gameState.randomNodeAngle = Double.random(in: 0..<360)
+            var newAngle: Double
+            let exclusionRange = 360.0 / 4
+            let lastAngle = self.gameState.randomNodeAngle
+            repeat {
+                newAngle = Double.random(in: 0..<360)
+            } while abs(newAngle - lastAngle) < exclusionRange || abs(newAngle - lastAngle) > 360 - exclusionRange
+            self.gameState.randomNodeAngle = newAngle
+
             withAnimation(.easeOut(duration: GameConstants.scaleAnimationDuration)) {
                 self.gameState.scale = 1.0
             }
