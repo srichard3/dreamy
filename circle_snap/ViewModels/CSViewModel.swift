@@ -28,7 +28,6 @@ class CSViewModel: ObservableObject {
     
     func onAppear() {
         startRotation()
-
         startConditionCycle()
     }
     
@@ -40,7 +39,7 @@ class CSViewModel: ObservableObject {
     }
     
     
-    // Starts the rotation animation timer, updating `progress` based on elapsed time.
+    // Starts the rotation animation timer, updating progress based on elapsed time.
     private func startRotation() {
         startTime = CACurrentMediaTime() // Track the start time when rotation begins
         displayLink = CADisplayLink(target: self, selector: #selector(updateRotation))
@@ -73,18 +72,13 @@ class CSViewModel: ObservableObject {
             case .none:
                 break
             }
-
-
         }
-        
-        // Apply progress change
+
         if isReverse {
             gameState.progress -= progressChange
         } else {
             gameState.progress += progressChange
         }
-        
-        // Ensure progress remains within 0.0 to 1.0
         gameState.progress = gameState.progress.truncatingRemainder(dividingBy: 1.0)
         if gameState.progress < 0 {
             gameState.progress += 1.0
@@ -92,18 +86,19 @@ class CSViewModel: ObservableObject {
         
         lastCycleProgress = cycleProgress
 
+        // Determine if the bar is in range (glowing)
+        let wasInRange = gameState.isGlowing
         gameState.isGlowing = isRectangleInRange()
         
-        if(gameState.isGlowing  && !isRectangleInRange()){
-            if(gameState.score != 0 && !didTap){
+        // If the bar passes through the node (was glowing but is no longer in range), handle the failure
+        if wasInRange && !gameState.isGlowing {
+            if gameState.score > 0 && !didTap {
                 handleFailedTap()
             }
-            didTap = false
-        }
-
-        gameState.isGlowing = isRectangleInRange()  // Update glow effect only when near target
-
+            didTap = false         }
     }
+
+    
     // Checks if the rotating rectangle is within the success range of the node's angle.
     private func isRectangleInRange() -> Bool {
         let normalizedProgress = normalizeAngle(gameState.progress * 360)
@@ -271,6 +266,3 @@ class CSViewModel: ObservableObject {
         weatherTimer?.cancel()
     }
 }
-
-    
-
