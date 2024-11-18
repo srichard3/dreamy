@@ -7,7 +7,7 @@ class CSViewModel: ObservableObject {
     @Published var gameStatus: GameStatus = .notStarted
     private var lastCycleProgress : Double = 0
     private var isReverse : Bool = false
-    private var didTapInRange : Bool = false
+    private var didTap : Bool = false
     private var rotationTimer: AnyCancellable?
     private var countdownTimer: AnyCancellable?
     private let angleTolerance: Double // Tolerance for alignment detection
@@ -70,10 +70,10 @@ class CSViewModel: ObservableObject {
         lastCycleProgress = cycleProgress
         
         if(gameState.isGlowing  && !isRectangleInRange()){
-            if(gameState.score != 0 && !didTapInRange){
+            if(gameState.score != 0 && !didTap){
                 handleFailedTap()
             }
-            didTapInRange = false
+            didTap = false
         }
 
         gameState.isGlowing = isRectangleInRange()  // Update glow effect only when near target
@@ -94,6 +94,7 @@ class CSViewModel: ObservableObject {
     
     // calls success or failure handlers based on alignment.
     func handleTap() {
+        didTap = true;
         if isRectangleInRange() {
             handleSuccessfulTap()
         } else {
@@ -107,8 +108,6 @@ class CSViewModel: ObservableObject {
         speedUpOnSuccessfulTap()
         gameState.lastClickProgress = gameState.progress
         isReverse = !isReverse
-        didTapInRange = true
-
         
         // Calculate accuracy based on how close to the center of the target range
         let normalizedProgress = normalizeAngle(gameState.progress * 360)
