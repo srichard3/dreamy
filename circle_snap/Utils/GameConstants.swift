@@ -23,7 +23,10 @@ struct GameConstants {
     static let windSpeedMultiplier: Double = 1.5
     static let sandSpeedMultiplier: Double = 0.5
     
-    static let conditions: [ConditionType] = [.sand, .wind]
+    static let iceMinAdjustment = 0.3
+    static let iceMaxAdjustment = 1.4
+    
+    static let conditions: [ConditionType] = [.sand, .wind, .ice]
 }
     
 

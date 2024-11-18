@@ -21,9 +21,11 @@ struct ConditionView: View {
     private var weatherColor: Color {
         switch weather {
         case .wind:
-            return .cyan
+            return .white
         case .sand:
             return .green
+        case .ice:
+            return .cyan
         case .none:
             return .clear
         }

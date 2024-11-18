@@ -52,6 +52,11 @@ class CSViewModel: ObservableObject {
         let diff = (current - last).truncatingRemainder(dividingBy: 1.0)
         return diff < -0.5 ? diff + 1.0 : (diff > 0.5 ? diff - 1.0 : diff)
     }
+    
+    private func calculateProbability(probability: Double) -> Bool {
+        return Double.random(in: 0.0...1.0) < probability
+    }
+    
     // Called by CADisplayLink to update the game state on each frame.
     @objc private func updateRotation() {
         guard let startTime = startTime else { return }
@@ -77,6 +82,11 @@ class CSViewModel: ObservableObject {
                 progressChange *= GameConstants.windSpeedMultiplier
             case .sand:
                 progressChange *= GameConstants.sandSpeedMultiplier
+            case .ice:
+                let isPositiveProgress = calculateProbability(probability: 0.8)
+                let adjustment = Double.random(in: GameConstants.iceMinAdjustment...GameConstants.iceMaxAdjustment)
+                let randomAdjustment = isPositiveProgress ? adjustment : -adjustment
+                progressChange *= randomAdjustment
             case .none:
                 break
             }
@@ -261,8 +271,7 @@ class CSViewModel: ObservableObject {
     
     private func updateCondition() {
         // Randomly choose between conditions
-        gameState.currentCondition = GameConstants.conditions.randomElement()!
-        // Random starting position for condition patch
+        gameState.currentCondition = .ice        // Random starting position for condition patch
         gameState.conditionPatchStartAngle = Double.random(in: 0..<360)
     }
     

@@ -40,6 +40,7 @@ struct GameState {
 enum ConditionType {
     case none
     case sand
+    case ice
     case wind
 }
 
