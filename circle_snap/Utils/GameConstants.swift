@@ -16,11 +16,14 @@ struct GameConstants {
     
     static let speedUpModifier: Double = 0.10
     
-    static let weatherEventDuration: TimeInterval = 20.0  // Weather changes every 20 seconds
-    static let weatherPatchSize: Double = 45.0  // Size of weather patch in degrees
+    static let conditionEventDuration: TimeInterval = 20.0  // Weather changes every 20 seconds
+    static let conditionPatchSize: Double = 45.0  // Size of weather patch in degrees
     
-    // Wind effect constant
-    static let windSpeedMultiplier: Double = 1.5   // Speed up factor in wind
+    
+    static let windSpeedMultiplier: Double = 1.5
+    static let sandSpeedMultiplier: Double = 0.5
+    
+    static let conditions: [ConditionType] = [.sand, .wind]
 }
     
 

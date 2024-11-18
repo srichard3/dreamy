@@ -29,7 +29,7 @@ class CSViewModel: ObservableObject {
     func onAppear() {
         startRotation()
 
-        startWeatherCycle()
+        startConditionCycle()
     }
     
     
@@ -57,18 +57,19 @@ class CSViewModel: ObservableObject {
         let currentAngle = normalizeAngle(gameState.progress * 360)
         
         // Check if in weather patch
-        let weatherStartAngle = gameState.weatherPatchStartAngle
-        let weatherEndAngle = normalizeAngle(weatherStartAngle + GameConstants.weatherPatchSize)
-        gameState.isInWeatherPatch = isAngleInRange(currentAngle, start: weatherStartAngle, end: weatherEndAngle)
+        let weatherStartAngle = gameState.conditionPatchStartAngle
+        let weatherEndAngle = normalizeAngle(weatherStartAngle + GameConstants.conditionPatchSize)
+        gameState.isInConditionPatch = isAngleInRange(currentAngle, start: weatherStartAngle, end: weatherEndAngle)
         
         // Calculate base progress change
         var progressChange = cycleProgress - lastCycleProgress
         
-        if gameState.isInWeatherPatch {
-            switch gameState.currentWeather {
+        if gameState.isInConditionPatch {
+            switch gameState.currentCondition {
             case .wind:
                 progressChange *= GameConstants.windSpeedMultiplier
-                
+            case .sand:
+                progressChange *= GameConstants.sandSpeedMultiplier
             case .none:
                 break
             }
@@ -236,23 +237,23 @@ class CSViewModel: ObservableObject {
         return
     }
     
-    private func startWeatherCycle() {
+    private func startConditionCycle() {
         // Initial weather setup
-        updateWeather()
+        updateCondition()
         
         // Create timer for weather changes
-        weatherTimer = Timer.publish(every: GameConstants.weatherEventDuration, on: .main, in: .common)
+        weatherTimer = Timer.publish(every: GameConstants.conditionEventDuration, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.updateWeather()
+                self?.updateCondition()
             }
     }
     
-    private func updateWeather() {
-        // Randomly choose between ice and wind
-        gameState.currentWeather = .wind
-        // Random starting position for weather patch
-        gameState.weatherPatchStartAngle = Double.random(in: 0..<360)
+    private func updateCondition() {
+        // Randomly choose between conditions
+        gameState.currentCondition = GameConstants.conditions.randomElement()!
+        // Random starting position for condition patch
+        gameState.conditionPatchStartAngle = Double.random(in: 0..<360)
     }
     
     private func isAngleInRange(_ angle: Double, start: Double, end: Double) -> Bool {
@@ -265,7 +266,7 @@ class CSViewModel: ObservableObject {
     
     // Cancels the timer when the ViewModel is deinitialized.
     deinit {
-        displayLink?.invalidate() // Stop the display link when the ViewModel is deallocated
+        displayLink?.invalidate()
         countdownTimer?.cancel()
         weatherTimer?.cancel()
     }

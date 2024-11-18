@@ -13,10 +13,10 @@ struct CSView: View {
         ZStack {
             CircleTrackView()
             ComboView(combo: viewModel.gameState.combo)
-            if viewModel.gameState.currentWeather != .none {
-                WeatherView(
-                    weather: viewModel.gameState.currentWeather,
-                    startAngle: viewModel.gameState.weatherPatchStartAngle
+            if viewModel.gameState.currentCondition != .none {
+                ConditionView(
+                    weather: viewModel.gameState.currentCondition,
+                    startAngle: viewModel.gameState.conditionPatchStartAngle
                 )
             }
             TargetNodeView(

@@ -1,9 +1,9 @@
 import SwiftUI
 
-struct WeatherView: View {
-    let weather: WeatherType
+struct ConditionView: View {
+    let weather: ConditionType
     let startAngle: Double
-    let size: Double = GameConstants.weatherPatchSize
+    let size: Double = GameConstants.conditionPatchSize
     let trackWidth: Double = 45
     
     var body: some View {
@@ -29,6 +29,8 @@ struct WeatherView: View {
     private var weatherColor: Color {
         switch weather {
         case .wind:
+            return .cyan
+        case .sand:
             return .green
         case .none:
             return .clear
