@@ -30,6 +30,8 @@ struct GameState {
     
     // modifiers
     var animationSpeed: Double = 4
+    
+    
 
 }
 
