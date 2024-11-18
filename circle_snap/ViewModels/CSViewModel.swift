@@ -13,6 +13,8 @@ class CSViewModel: ObservableObject {
     private let angleTolerance: Double // Tolerance for alignment detection
     private var displayLink: CADisplayLink? // CADisplayLink for syncing with screen refresh rate
     private var startTime: CFTimeInterval? // Track the start time of the animation
+    
+    private var weatherTimer: AnyCancellable?
         
     
     // Debug properties to visualize the start and end angles for the active zone
@@ -26,7 +28,9 @@ class CSViewModel: ObservableObject {
     
     func onAppear() {
         startRotation()
+        startConditionCycle()
     }
+    
     
     
     // Calculates the tolerance angle based on the radius of the node and circle.
@@ -35,7 +39,7 @@ class CSViewModel: ObservableObject {
     }
     
     
-    // Starts the rotation animation timer, updating `progress` based on elapsed time.
+    // Starts the rotation animation timer, updating progress based on elapsed time.
     private func startRotation() {
         startTime = CACurrentMediaTime() // Track the start time when rotation begins
         displayLink = CADisplayLink(target: self, selector: #selector(updateRotation))
@@ -47,37 +51,53 @@ class CSViewModel: ObservableObject {
         guard let startTime = startTime else { return }
         let elapsedTime = CACurrentMediaTime() - startTime
         let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: gameState.animationSpeed) / gameState.animationSpeed
-        // Calculate x as the difference in cycleProgress from the last frame
-        let x = cycleProgress - lastCycleProgress
-            
-        if isReverse {
-            // Subtract x for reverse movement
-            gameState.progress -= x
-        } else {
-            // Add x for forward movement
-            gameState.progress += x
+        
+        // Calculate current angle
+        let currentAngle = normalizeAngle(gameState.progress * 360)
+        
+        // Check if in weather patch
+        let weatherStartAngle = gameState.conditionPatchStartAngle
+        let weatherEndAngle = normalizeAngle(weatherStartAngle + GameConstants.conditionPatchSize)
+        gameState.isInConditionPatch = isAngleInRange(currentAngle, start: weatherStartAngle, end: weatherEndAngle)
+        
+        // Calculate base progress change
+        var progressChange = cycleProgress - lastCycleProgress
+        
+        if gameState.isInConditionPatch {
+            switch gameState.currentCondition {
+            case .wind:
+                progressChange *= GameConstants.windSpeedMultiplier
+            case .sand:
+                progressChange *= GameConstants.sandSpeedMultiplier
+            case .none:
+                break
+            }
         }
-            
-        // Ensure progress remains within 0.0 to 1.0
+
+        if isReverse {
+            gameState.progress -= progressChange
+        } else {
+            gameState.progress += progressChange
+        }
         gameState.progress = gameState.progress.truncatingRemainder(dividingBy: 1.0)
-            
-        // Adjust for negative values to keep within range
         if gameState.progress < 0 {
             gameState.progress += 1.0
         }
-            
-        // Update lastCycleProgress for the next frame
-        lastCycleProgress = cycleProgress
         
-        if(gameState.isGlowing  && !isRectangleInRange()){
-            if(gameState.score != 0 && !didTap){
+        lastCycleProgress = cycleProgress
+
+        // Determine if the bar is in range (glowing)
+        let wasInRange = gameState.isGlowing
+        gameState.isGlowing = isRectangleInRange()
+        
+        // If the bar passes through the node (was glowing but is no longer in range), handle the failure
+        if wasInRange && !gameState.isGlowing {
+            if gameState.score > 0 && !didTap {
                 handleFailedTap()
             }
-            didTap = false
-        }
-
-        gameState.isGlowing = isRectangleInRange()  // Update glow effect only when near target
+            didTap = false         }
     }
+
     
     // Checks if the rotating rectangle is within the success range of the node's angle.
     private func isRectangleInRange() -> Bool {
@@ -212,12 +232,37 @@ class CSViewModel: ObservableObject {
         return
     }
     
+    private func startConditionCycle() {
+        // Initial weather setup
+        updateCondition()
+        
+        // Create timer for weather changes
+        weatherTimer = Timer.publish(every: GameConstants.conditionEventDuration, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.updateCondition()
+            }
+    }
+    
+    private func updateCondition() {
+        // Randomly choose between conditions
+        gameState.currentCondition = GameConstants.conditions.randomElement()!
+        // Random starting position for condition patch
+        gameState.conditionPatchStartAngle = Double.random(in: 0..<360)
+    }
+    
+    private func isAngleInRange(_ angle: Double, start: Double, end: Double) -> Bool {
+        if start <= end {
+            return angle >= start && angle <= end
+        } else {
+            return angle >= start || angle <= end
+        }
+    }
+    
     // Cancels the timer when the ViewModel is deinitialized.
     deinit {
-        displayLink?.invalidate() // Stop the display link when the ViewModel is deallocated
+        displayLink?.invalidate()
         countdownTimer?.cancel()
+        weatherTimer?.cancel()
     }
 }
-
-    
-
