@@ -25,7 +25,7 @@ struct ContentView: View {
                     .padding(.vertical, 20)
                 CSView(viewModel: viewModel)
                 Spacer()
-                GameTimerView(gameTimer: viewModel.gameState.gameTimer)
+                //GameTimerView(gameTimer: viewModel.gameState.gameTimer)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .contentShape(Rectangle())

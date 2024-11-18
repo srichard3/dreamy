@@ -5,8 +5,9 @@ import Combine
 class CSViewModel: ObservableObject {
     @Published var gameState = GameState() // Observable game state object to manage UI updates
     @Published var gameStatus: GameStatus = .notStarted
-    private var lastCycleProgress :Double = 0;
-    private var isReverse : Bool = false;
+    private var lastCycleProgress : Double = 0
+    private var isReverse : Bool = false
+    private var didTapInRange : Bool = false
     private var rotationTimer: AnyCancellable?
     private var countdownTimer: AnyCancellable?
     private let angleTolerance: Double // Tolerance for alignment detection
@@ -25,7 +26,6 @@ class CSViewModel: ObservableObject {
     
     func onAppear() {
         startRotation()
-        startCountdown()
     }
     
     
@@ -68,6 +68,13 @@ class CSViewModel: ObservableObject {
             
         // Update lastCycleProgress for the next frame
         lastCycleProgress = cycleProgress
+        
+        if(gameState.isGlowing  && !isRectangleInRange()){
+            if(gameState.score != 0 && !didTapInRange){
+                handleFailedTap()
+            }
+            didTapInRange = false
+        }
 
         gameState.isGlowing = isRectangleInRange()  // Update glow effect only when near target
     }
@@ -85,28 +92,6 @@ class CSViewModel: ObservableObject {
     }
     
     
-    func startCountdown() {
-        // Reset the countdown timer
-        gameState.gameTimer = 5
-        
-        // Invalidate any existing timer to avoid duplicate timers
-        countdownTimer?.cancel()
-        
-        // Start a new timer that updates every second
-        countdownTimer = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                
-                // Decrease the countdown, if it reaches 0, handle timeout
-                if self.gameState.gameTimer > 0 {
-                    self.gameState.gameTimer -= 1
-                } else {
-                    self.handleFailedTap() // treat as a failed tap
-                }
-            }
-    }
-    
     // calls success or failure handlers based on alignment.
     func handleTap() {
         if isRectangleInRange() {
@@ -114,7 +99,6 @@ class CSViewModel: ObservableObject {
         } else {
             handleFailedTap()
         }
-        startCountdown()
     }
     
     
@@ -123,6 +107,8 @@ class CSViewModel: ObservableObject {
         speedUpOnSuccessfulTap()
         gameState.lastClickProgress = gameState.progress
         isReverse = !isReverse
+        didTapInRange = true
+
         
         // Calculate accuracy based on how close to the center of the target range
         let normalizedProgress = normalizeAngle(gameState.progress * 360)
@@ -186,8 +172,7 @@ class CSViewModel: ObservableObject {
             countdownTimer?.cancel()
         } else {
             gameState.lives -= 1
-                startCountdown()
-            }
+        }
             
             withAnimation(Animation.easeInOut(duration: GameConstants.shakeDuration).repeatCount(3, autoreverses: true)) {
                 gameState.scale = 0.95
