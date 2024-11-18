@@ -46,6 +46,12 @@ class CSViewModel: ObservableObject {
         displayLink?.add(to: .current, forMode: .common)
     }
     
+    // Helper: Calculate the smallest difference between two points on a circular scale
+    // transitioning from 0.99 to 0.01 should result in 0.02, not -0.98.
+    func circularDifference(current: Double, last: Double) -> Double {
+        let diff = (current - last).truncatingRemainder(dividingBy: 1.0)
+        return diff < -0.5 ? diff + 1.0 : (diff > 0.5 ? diff - 1.0 : diff)
+    }
     // Called by CADisplayLink to update the game state on each frame.
     @objc private func updateRotation() {
         guard let startTime = startTime else { return }
@@ -61,8 +67,10 @@ class CSViewModel: ObservableObject {
         gameState.isInConditionPatch = isAngleInRange(currentAngle, start: weatherStartAngle, end: weatherEndAngle)
         
         // Calculate base progress change
-        var progressChange = cycleProgress - lastCycleProgress
-        
+        //var progressChange = abs(cycleProgress - lastCycleProgress)
+        var progressChange = circularDifference(current: cycleProgress, last: lastCycleProgress)
+
+        lastCycleProgress = cycleProgress
         if gameState.isInConditionPatch {
             switch gameState.currentCondition {
             case .wind:
@@ -74,18 +82,24 @@ class CSViewModel: ObservableObject {
             }
         }
 
-        if isReverse {
-            gameState.progress -= progressChange
-        } else {
-            gameState.progress += progressChange
-        }
-        gameState.progress = gameState.progress.truncatingRemainder(dividingBy: 1.0)
-        if gameState.progress < 0 {
-            gameState.progress += 1.0
+        if progressChange < 0 {
+            progressChange += 1.0
+        } else if progressChange >= 1.0 {
+            progressChange -= 1.0
         }
         
-        lastCycleProgress = cycleProgress
-
+        var progress = gameState.progress
+        if isReverse {
+            progress -= progressChange
+        } else {
+            progress += progressChange
+        }
+        progress = progress.truncatingRemainder(dividingBy: 1.0)
+        if progress < 0 {
+            progress += 1.0
+        }
+        gameState.progress = progress
+        
         // Determine if the bar is in range (glowing)
         let wasInRange = gameState.isGlowing
         gameState.isGlowing = isRectangleInRange()
@@ -95,7 +109,8 @@ class CSViewModel: ObservableObject {
             if gameState.score > 0 && !didTap {
                 handleFailedTap()
             }
-            didTap = false         }
+            didTap = false
+        }
     }
 
     
