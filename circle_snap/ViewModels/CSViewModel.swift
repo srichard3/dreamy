@@ -271,7 +271,7 @@ class CSViewModel: ObservableObject {
     
     private func updateCondition() {
         // Randomly choose between conditions
-        gameState.currentCondition = .ice        // Random starting position for condition patch
+        gameState.currentCondition = GameConstants.conditions.randomElement()!   // Random starting position for condition patch
         gameState.conditionPatchStartAngle = Double.random(in: 0..<360)
     }
     
