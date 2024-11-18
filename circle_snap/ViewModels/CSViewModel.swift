@@ -64,13 +64,15 @@ class CSViewModel: ObservableObject {
         var progressChange = cycleProgress - lastCycleProgress
         
         if gameState.isInWeatherPatch {
-            switch gameState.currentWeather {                
+            switch gameState.currentWeather {
             case .wind:
                 progressChange *= GameConstants.windSpeedMultiplier
                 
             case .none:
                 break
             }
+
+
         }
         
         // Apply progress change
