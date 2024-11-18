@@ -29,7 +29,7 @@ struct GameState {
     var timer: AnyCancellable?
     
     // modifiers
-    var animationSpeed: Double = 4
+    var animationSpeed: Double = 3.5
     
     var currentCondition: ConditionType = .none
     var conditionPatchStartAngle: Double = 0  // Starting angle of weather patch
