@@ -31,10 +31,18 @@ struct GameState {
     // modifiers
     var animationSpeed: Double = 4
     
-    
+    var currentWeather: WeatherType = .none
+    var weatherPatchStartAngle: Double = 0  // Starting angle of weather patch
+    var isInWeatherPatch: Bool = false      // Whether the pointer is currently in weather
 
 }
 
+enum WeatherType {
+    case none
+    case wind
+}
+
+    
 enum GameStatus {
     case gameOver, inProgress, notStarted
 }

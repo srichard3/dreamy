@@ -21,6 +21,12 @@ struct CSView: View {
                 onTap: viewModel.handleTap
             )
             MovingIndicatorView(progress: viewModel.gameState.progress)
+            if viewModel.gameState.currentWeather != .none {
+                WeatherView(
+                    weather: viewModel.gameState.currentWeather,
+                    startAngle: viewModel.gameState.weatherPatchStartAngle
+                )
+            }
             
             // Uncomment for debugging
             //DebugOverlayView(viewModel: viewModel)

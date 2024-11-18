@@ -12,6 +12,8 @@ class CSViewModel: ObservableObject {
     private let angleTolerance: Double // Tolerance for alignment detection
     private var displayLink: CADisplayLink? // CADisplayLink for syncing with screen refresh rate
     private var startTime: CFTimeInterval? // Track the start time of the animation
+    
+    private var weatherTimer: AnyCancellable?
         
     
     // Debug properties to visualize the start and end angles for the active zone
@@ -26,7 +28,9 @@ class CSViewModel: ObservableObject {
     func onAppear() {
         startRotation()
         startCountdown()
+        startWeatherCycle()
     }
+    
     
     
     // Calculates the tolerance angle based on the radius of the node and circle.
@@ -47,31 +51,44 @@ class CSViewModel: ObservableObject {
         guard let startTime = startTime else { return }
         let elapsedTime = CACurrentMediaTime() - startTime
         let cycleProgress = elapsedTime.truncatingRemainder(dividingBy: gameState.animationSpeed) / gameState.animationSpeed
-        // Calculate x as the difference in cycleProgress from the last frame
-        let x = cycleProgress - lastCycleProgress
-            
-        if isReverse {
-            // Subtract x for reverse movement
-            gameState.progress -= x
-        } else {
-            // Add x for forward movement
-            gameState.progress += x
+        
+        // Calculate current angle
+        let currentAngle = normalizeAngle(gameState.progress * 360)
+        
+        // Check if in weather patch
+        let weatherStartAngle = gameState.weatherPatchStartAngle
+        let weatherEndAngle = normalizeAngle(weatherStartAngle + GameConstants.weatherPatchSize)
+        gameState.isInWeatherPatch = isAngleInRange(currentAngle, start: weatherStartAngle, end: weatherEndAngle)
+        
+        // Calculate base progress change
+        var progressChange = cycleProgress - lastCycleProgress
+        
+        if gameState.isInWeatherPatch {
+            switch gameState.currentWeather {                
+            case .wind:
+                progressChange *= GameConstants.windSpeedMultiplier
+                
+            case .none:
+                break
+            }
         }
-            
+        
+        // Apply progress change
+        if isReverse {
+            gameState.progress -= progressChange
+        } else {
+            gameState.progress += progressChange
+        }
+        
         // Ensure progress remains within 0.0 to 1.0
         gameState.progress = gameState.progress.truncatingRemainder(dividingBy: 1.0)
-            
-        // Adjust for negative values to keep within range
         if gameState.progress < 0 {
             gameState.progress += 1.0
         }
-            
-        // Update lastCycleProgress for the next frame
+        
         lastCycleProgress = cycleProgress
-
-        gameState.isGlowing = isRectangleInRange()  // Update glow effect only when near target
+        gameState.isGlowing = isRectangleInRange()
     }
-    
     // Checks if the rotating rectangle is within the success range of the node's angle.
     private func isRectangleInRange() -> Bool {
         let normalizedProgress = normalizeAngle(gameState.progress * 360)
@@ -228,10 +245,38 @@ class CSViewModel: ObservableObject {
         return
     }
     
+    private func startWeatherCycle() {
+        // Initial weather setup
+        updateWeather()
+        
+        // Create timer for weather changes
+        weatherTimer = Timer.publish(every: GameConstants.weatherEventDuration, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.updateWeather()
+            }
+    }
+    
+    private func updateWeather() {
+        // Randomly choose between ice and wind
+        gameState.currentWeather = .wind
+        // Random starting position for weather patch
+        gameState.weatherPatchStartAngle = Double.random(in: 0..<360)
+    }
+    
+    private func isAngleInRange(_ angle: Double, start: Double, end: Double) -> Bool {
+        if start <= end {
+            return angle >= start && angle <= end
+        } else {
+            return angle >= start || angle <= end
+        }
+    }
+    
     // Cancels the timer when the ViewModel is deinitialized.
     deinit {
         displayLink?.invalidate() // Stop the display link when the ViewModel is deallocated
         countdownTimer?.cancel()
+        weatherTimer?.cancel()
     }
 }
 
