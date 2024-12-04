@@ -19,11 +19,6 @@ struct GameState {
     
     // score system
     var score: Int = 0
-    var combo: Int = 0
-    var highestCombo: Int = 0
-    var lastHitAccuracy: String = ""
-    
-    var lives: Int = 3
     
     var gameTimer: Int = 5
     var timer: AnyCancellable?
@@ -32,8 +27,8 @@ struct GameState {
     var animationSpeed: Double = 3.5
     
     var currentCondition: ConditionType = .none
-    var conditionPatchStartAngle: Double = 0  // Starting angle of weather patch
-    var isInConditionPatch: Bool = false      // Whether the pointer is currently in weather
+    var conditionPatchStartAngle: Double = 0
+    var isInConditionPatch: Bool = false
     
     var isBarVisible: Bool = true
 

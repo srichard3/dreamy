@@ -17,10 +17,6 @@ struct GameOverView: View {
         Button("Play Again") {
             viewModel.gameStatus = .inProgress
             viewModel.gameState.score = 0
-            viewModel.gameState.combo = 0
-            viewModel.gameState.highestCombo = 0
-            viewModel.gameState.lastHitAccuracy = ""
-            viewModel.gameState.lives = 3
             viewModel.gameState.animationSpeed = 4
         }
     }

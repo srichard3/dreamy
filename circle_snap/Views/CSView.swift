@@ -12,7 +12,7 @@ struct CSView: View {
     var body: some View {
         ZStack {
             CircleTrackView()
-            ComboView(combo: viewModel.gameState.combo)
+            ComboView(score: viewModel.gameState.score)
             if viewModel.gameState.currentCondition != .none {
                 ConditionView(
                     weather: viewModel.gameState.currentCondition,

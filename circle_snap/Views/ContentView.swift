@@ -20,9 +20,6 @@ struct ContentView: View {
             
         case .inProgress:
             VStack {
-                GameInfoView(viewModel: viewModel)
-                LastHitAccuracyView(lastHitAccuracy: viewModel.gameState.lastHitAccuracy)
-                    .padding(.vertical, 20)
                 CSView(viewModel: viewModel)
                 Spacer()
             }
