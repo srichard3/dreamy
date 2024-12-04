@@ -157,23 +157,7 @@ class CSViewModel: ObservableObject {
         speedUpOnSuccessfulTap()
         gameState.lastClickProgress = gameState.progress
         isReverse = !isReverse
-        
-        // Calculate accuracy based on how close to the center of the target range
-        let normalizedProgress = normalizeAngle(gameState.progress * 360)
-        let targetAngle = gameState.randomNodeAngle
-        let angleDifference = abs(normalizedProgress - targetAngle)
-        let accuracy = calculateAccuracy(angleDifference)
-        
-        // Update score based on accuracy
-        let basePoints = calculateBasePoints(accuracy)
-        gameState.combo += 1
-        let comboMultiplier = min(Double(gameState.combo) * 0.1 + 1.0, 2.0) // Max 2x multiplier
-        let finalPoints = Int(Double(basePoints) * comboMultiplier)
-        
-        // Update game state
-        gameState.score += finalPoints
-        gameState.highestCombo = max(gameState.highestCombo, gameState.combo)
-        gameState.lastHitAccuracy = accuracy
+        gameState.score += 1
         
         // Animations
         withAnimation(.easeIn(duration: GameConstants.scaleAnimationDuration)) {
@@ -195,45 +179,21 @@ class CSViewModel: ObservableObject {
         }
     }
     
-    private func calculateAccuracy(_ angleDifference: Double) -> String {
-        if angleDifference <= 5 { return "PERFECT!" }
-        else if angleDifference <= 10 { return "Great!" }
-        else if angleDifference <= 15 { return "Good" }
-        else { return "OK" }
-    }
-    
-    private func calculateBasePoints(_ accuracy: String) -> Int {
-        switch accuracy {
-        case "PERFECT!": return 100
-        case "Great!": return 75
-        case "Good": return 50
-        default: return 25
-        }
-    }
-    
     // Handles a failed tap, triggering a shaking animation to indicate incorrect alignment.
     private func handleFailedTap() {
-        gameState.combo = 0  // Reset combo on miss
+        gameStatus = .gameOver
+        withAnimation(Animation.easeInOut(duration: GameConstants.shakeDuration).repeatCount(3, autoreverses: true)) {
+            gameState.scale = 0.95
+            gameState.shakeOffset = 10
+        }
         
-        if gameState.lives <= 1  {
-            gameStatus = .gameOver
-            countdownTimer?.cancel()
-        } else {
-            gameState.lives -= 1
-        }
-            
-            withAnimation(Animation.easeInOut(duration: GameConstants.shakeDuration).repeatCount(3, autoreverses: true)) {
-                gameState.scale = 0.95
-                gameState.shakeOffset = 10
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                withAnimation {
-                    self.gameState.scale = 1.0
-                    self.gameState.shakeOffset = 0
-                }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            withAnimation {
+                self.gameState.scale = 1.0
+                self.gameState.shakeOffset = 0
             }
         }
+    }
         
         
     // Normalizes an angle to fall within the 0-360° range.

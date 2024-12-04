@@ -26,7 +26,7 @@ struct GameConstants {
     static let iceMinAdjustment = 0.3
     static let iceMaxAdjustment = 1.4
     
-    static let conditions: [ConditionType] = [.fog]
+    static let conditions: [ConditionType] = [.wind, .ice, .sand, .fog]
 }
     
 

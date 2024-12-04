@@ -19,11 +19,6 @@ struct GameState {
     
     // score system
     var score: Int = 0
-    var combo: Int = 0
-    var highestCombo: Int = 0
-    var lastHitAccuracy: String = ""
-    
-    var lives: Int = 3
     
     var gameTimer: Int = 5
     var timer: AnyCancellable?
