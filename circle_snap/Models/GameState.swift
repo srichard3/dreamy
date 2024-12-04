@@ -27,8 +27,8 @@ struct GameState {
     var animationSpeed: Double = 3.5
     
     var currentCondition: ConditionType = .none
-    var conditionPatchStartAngle: Double = 0  // Starting angle of weather patch
-    var isInConditionPatch: Bool = false      // Whether the pointer is currently in weather
+    var conditionPatchStartAngle: Double = 0
+    var isInConditionPatch: Bool = false
     
     var isBarVisible: Bool = true
 

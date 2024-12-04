@@ -16,7 +16,7 @@ struct GameConstants {
     
     static let speedUpModifier: Double = 0.10
     
-    static let conditionEventDuration: TimeInterval = 20.0 
+    static let conditionEventDuration: TimeInterval = 10.0
     static let conditionPatchSize: Double = 80.0
     
     
