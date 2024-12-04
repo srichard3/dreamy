@@ -34,6 +34,8 @@ struct GameState {
     var currentCondition: ConditionType = .none
     var conditionPatchStartAngle: Double = 0  // Starting angle of weather patch
     var isInConditionPatch: Bool = false      // Whether the pointer is currently in weather
+    
+    var isBarVisible: Bool = true
 
 }
 
@@ -42,6 +44,7 @@ enum ConditionType {
     case sand
     case ice
     case wind
+    case fog
 }
 
     

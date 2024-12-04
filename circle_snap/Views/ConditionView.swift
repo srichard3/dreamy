@@ -26,6 +26,8 @@ struct ConditionView: View {
             return .green
         case .ice:
             return .cyan
+        case .fog:
+            return .gray
         case .none:
             return .clear
         }

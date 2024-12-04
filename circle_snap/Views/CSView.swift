@@ -26,7 +26,7 @@ struct CSView: View {
                 isGlowing: viewModel.gameState.isGlowing,
                 onTap: viewModel.handleTap
             )
-            MovingIndicatorView(progress: viewModel.gameState.progress)
+            MovingIndicatorView(progress: viewModel.gameState.progress, isBarVisible: viewModel.gameState.isBarVisible)
             
             // Uncomment for debugging
             //DebugOverlayView(viewModel: viewModel)

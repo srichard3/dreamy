@@ -9,6 +9,7 @@ import SwiftUI
 struct MovingIndicatorView: View {
     let progress: Double
     let circleRadius: CGFloat = GameConstants.circleRadius
+    let isBarVisible: Bool
     
     var body: some View {
         GeometryReader { geometry in
@@ -26,7 +27,7 @@ struct MovingIndicatorView: View {
                         y: geometry.size.height / 2 + circleRadius * sin((progress * 360) * .pi / 180)
                     )
                     .cornerRadius(50)
-            }
+                    .opacity(isBarVisible ? 1.0 : 0.1)            }
         }
     }
 }
