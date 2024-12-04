@@ -87,9 +87,13 @@ class CSViewModel: ObservableObject {
                 let adjustment = Double.random(in: GameConstants.iceMinAdjustment...GameConstants.iceMaxAdjustment)
                 let randomAdjustment = isPositiveProgress ? adjustment : -adjustment
                 progressChange *= randomAdjustment
+            case .fog:
+                gameState.isBarVisible = false
             case .none:
                 break
             }
+        } else {
+            gameState.isBarVisible = true
         }
 
         if progressChange < 0 {
