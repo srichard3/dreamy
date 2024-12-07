@@ -2,7 +2,7 @@
 //  MovingIndicatorNode.swift
 //  circle_snap
 //
-//  Created by Mario Lopez on 12/6/24.
+//  Created by Duy Nguyen on 12/7/24.
 //
 
 import SpriteKit
