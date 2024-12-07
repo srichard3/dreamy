@@ -1,9 +1,10 @@
 //
-//  CSLayoutInfo.swift
+//  MovingIndicatorNode.swift
 //  circle_snap
 //
-//  Created by Duy Nguyen on 10/24/24.
+//  Created by Mario Lopez on 12/6/24.
 //
+
 import SpriteKit
 
 class MovingIndicatorNode: SKNode {
@@ -32,4 +33,3 @@ class MovingIndicatorNode: SKNode {
         indicator.zRotation = CGFloat(angle)
     }
 }
-

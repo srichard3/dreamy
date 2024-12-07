@@ -1,12 +1,21 @@
 //
-//  CSGameInfo.swift
+//  GameState.swift
 //  circle_snap
 //
-//  Created by Duy Nguyen on 10/24/24.
+//  Created by Mario Lopez on 12/6/24.
 //
 
 import SpriteKit
 import GameplayKit
+// Enum for Condition Types
+enum ConditionType {
+    case none
+    case sand
+    case ice
+    case wind
+    case fog
+}
+
 
 class GameState {
     var progress: Double = 0.0
@@ -46,14 +55,6 @@ class GameState {
     }
 }
 
-// Enum for Condition Types
-enum ConditionType {
-    case none
-    case sand
-    case ice
-    case wind
-    case fog
-}
 
 // States for Gameplay
 class GameNotStartedState: GKState {
