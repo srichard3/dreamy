@@ -7,13 +7,23 @@
 
 import SpriteKit
 
+
 class CircleTrackNode: SKShapeNode {
-    init(radius: CGFloat) {
+    // Custom initializer
+    init(radius: CGFloat, lineWidth: CGFloat, color: SKColor) {
         super.init()
-        self.path = CGPath(ellipseIn: CGRect(x: -radius, y: -radius, width: 2 * radius, height: 2 * radius), transform: nil)
-        self.strokeColor = .white
-        self.lineWidth = 45
-        self.alpha = 0.8
+
+        // Define the circular path
+        let path = CGMutablePath()
+        path.addArc(center: .zero, radius: radius, startAngle: 0, endAngle: CGFloat.pi * 2, clockwise: false)
+        self.path = path
+
+        // Configure the stroke
+        self.strokeColor = color.withAlphaComponent(0.8)
+        self.lineWidth = lineWidth
+
+        // Optional: Add effects like glow or shadow
+        self.glowWidth = 5.0
     }
 
     required init?(coder aDecoder: NSCoder) {
