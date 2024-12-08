@@ -12,6 +12,23 @@
 		04056B0B2CCA13960041B608 /* GameContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B062CCA13960041B608 /* GameContext.swift */; };
 		04056B0C2CCA13960041B608 /* GameModeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B072CCA13960041B608 /* GameModeType.swift */; };
 		04056B0D2CCA13960041B608 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B052CCA13960041B608 /* Dependencies.swift */; };
+		046ED31D2D0410D900BA9AE3 /* ConditionNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED31C2D0410D600BA9AE3 /* ConditionNode.swift */; };
+		046ED31F2D04118400BA9AE3 /* GameOverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED31E2D04117E00BA9AE3 /* GameOverNode.swift */; };
+		046ED3212D0411B500BA9AE3 /* StartNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3202D0411B300BA9AE3 /* StartNode.swift */; };
+		046ED3232D041E3E00BA9AE3 /* GameConditionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3222D041E2B00BA9AE3 /* GameConditionManager.swift */; };
+		046ED3272D0428C300BA9AE3 /* CircleTrackNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3262D0428BD00BA9AE3 /* CircleTrackNode.swift */; };
+		046ED3292D0428D500BA9AE3 /* ScoreNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3282D0428D200BA9AE3 /* ScoreNode.swift */; };
+		046ED32B2D0428EC00BA9AE3 /* MovingIndicatorNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED32A2D0428E800BA9AE3 /* MovingIndicatorNode.swift */; };
+		046ED32D2D04290B00BA9AE3 /* DebugOverlayNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED32C2D04290200BA9AE3 /* DebugOverlayNode.swift */; };
+		046ED3332D04294400BA9AE3 /* TargetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3322D04293E00BA9AE3 /* TargetNode.swift */; };
+		625BF1862D03F6E300F6DFC5 /* GameConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625BF1852D03F6E300F6DFC5 /* GameConstants.swift */; };
+		625BF1882D03F76A00F6DFC5 /* FPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625BF1872D03F76A00F6DFC5 /* FPSTracker.swift */; };
+		625BF2882D05457900F6DFC5 /* CSGameInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B0F2CCA159B0041B608 /* CSGameInfo.swift */; };
+		625BF2892D05458200F6DFC5 /* CSLayoutInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B102CCA15AE0041B608 /* CSLayoutInfo.swift */; };
+		625BF28A2D0545A200F6DFC5 /* CSGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B192CCA17C30041B608 /* CSGameScene.swift */; };
+		625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B182CCA16340041B608 /* CSGameContext.swift */; };
+		625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B172CCA16180041B608 /* CSGameIdleState.swift */; };
+		625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3252D041EC600BA9AE3 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,15 +59,40 @@
 		04056B082CCA13960041B608 /* GameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameType.swift; sourceTree = "<group>"; };
 		04056B0F2CCA159B0041B608 /* CSGameInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameInfo.swift; sourceTree = "<group>"; };
 		04056B102CCA15AE0041B608 /* CSLayoutInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSLayoutInfo.swift; sourceTree = "<group>"; };
-		04056B142CCA15EB0041B608 /* CSBoxNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSBoxNode.swift; sourceTree = "<group>"; };
 		04056B172CCA16180041B608 /* CSGameIdleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameIdleState.swift; sourceTree = "<group>"; };
 		04056B182CCA16340041B608 /* CSGameContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameContext.swift; sourceTree = "<group>"; };
 		04056B192CCA17C30041B608 /* CSGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameScene.swift; sourceTree = "<group>"; };
+		046ED31C2D0410D600BA9AE3 /* ConditionNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionNode.swift; sourceTree = "<group>"; };
+		046ED31E2D04117E00BA9AE3 /* GameOverNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverNode.swift; sourceTree = "<group>"; };
+		046ED3202D0411B300BA9AE3 /* StartNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartNode.swift; sourceTree = "<group>"; };
+		046ED3222D041E2B00BA9AE3 /* GameConditionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConditionManager.swift; sourceTree = "<group>"; };
+		046ED3252D041EC600BA9AE3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		046ED3262D0428BD00BA9AE3 /* CircleTrackNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTrackNode.swift; sourceTree = "<group>"; };
+		046ED3282D0428D200BA9AE3 /* ScoreNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreNode.swift; sourceTree = "<group>"; };
+		046ED32A2D0428E800BA9AE3 /* MovingIndicatorNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovingIndicatorNode.swift; sourceTree = "<group>"; };
+		046ED32C2D04290200BA9AE3 /* DebugOverlayNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugOverlayNode.swift; sourceTree = "<group>"; };
+		046ED3322D04293E00BA9AE3 /* TargetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetNode.swift; sourceTree = "<group>"; };
+		625BF1852D03F6E300F6DFC5 /* GameConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConstants.swift; sourceTree = "<group>"; };
+		625BF1872D03F76A00F6DFC5 /* FPSTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPSTracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		625BF2872D05405E00F6DFC5 /* Exceptions for "circle_snap" folder in "circle_snap" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Utils/FPSTracker.swift,
+				Utils/GameConstants.swift,
+			);
+			target = 04056AD42CCA13370041B608 /* circle_snap */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		04056AD72CCA13370041B608 /* circle_snap */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				625BF2872D05405E00F6DFC5 /* Exceptions for "circle_snap" folder in "circle_snap" target */,
+			);
 			path = circle_snap;
 			sourceTree = "<group>";
 		};
@@ -94,6 +136,7 @@
 		04056ACC2CCA13370041B608 = {
 			isa = PBXGroup;
 			children = (
+				046ED3242D041EB900BA9AE3 /* circleSnap */,
 				04056B032CCA136B0041B608 /* Assets */,
 				04056B022CCA13650041B608 /* Code */,
 				04056AD62CCA13370041B608 /* Products */,
@@ -149,8 +192,11 @@
 		04056B0E2CCA15920041B608 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				046ED3222D041E2B00BA9AE3 /* GameConditionManager.swift */,
 				04056B102CCA15AE0041B608 /* CSLayoutInfo.swift */,
 				04056B0F2CCA159B0041B608 /* CSGameInfo.swift */,
+				625BF1852D03F6E300F6DFC5 /* GameConstants.swift */,
+				625BF1872D03F76A00F6DFC5 /* FPSTracker.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -165,7 +211,14 @@
 		04056B132CCA15DC0041B608 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
-				04056B142CCA15EB0041B608 /* CSBoxNode.swift */,
+				046ED3322D04293E00BA9AE3 /* TargetNode.swift */,
+				046ED32C2D04290200BA9AE3 /* DebugOverlayNode.swift */,
+				046ED32A2D0428E800BA9AE3 /* MovingIndicatorNode.swift */,
+				046ED3282D0428D200BA9AE3 /* ScoreNode.swift */,
+				046ED3262D0428BD00BA9AE3 /* CircleTrackNode.swift */,
+				046ED3202D0411B300BA9AE3 /* StartNode.swift */,
+				046ED31E2D04117E00BA9AE3 /* GameOverNode.swift */,
+				046ED31C2D0410D600BA9AE3 /* ConditionNode.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -176,6 +229,14 @@
 				04056B172CCA16180041B608 /* CSGameIdleState.swift */,
 			);
 			path = States;
+			sourceTree = "<group>";
+		};
+		046ED3242D041EB900BA9AE3 /* circleSnap */ = {
+			isa = PBXGroup;
+			children = (
+				046ED3252D041EC600BA9AE3 /* ContentView.swift */,
+			);
+			path = circleSnap;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -323,9 +384,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */,
+				625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */,
+				625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */,
+				625BF28A2D0545A200F6DFC5 /* CSGameScene.swift in Sources */,
+				625BF2892D05458200F6DFC5 /* CSLayoutInfo.swift in Sources */,
+				625BF2882D05457900F6DFC5 /* CSGameInfo.swift in Sources */,
+				046ED31D2D0410D900BA9AE3 /* ConditionNode.swift in Sources */,
+				046ED32B2D0428EC00BA9AE3 /* MovingIndicatorNode.swift in Sources */,
+				046ED3332D04294400BA9AE3 /* TargetNode.swift in Sources */,
+				046ED3272D0428C300BA9AE3 /* CircleTrackNode.swift in Sources */,
+				046ED3232D041E3E00BA9AE3 /* GameConditionManager.swift in Sources */,
 				04056B0A2CCA13960041B608 /* GameType.swift in Sources */,
+				625BF1882D03F76A00F6DFC5 /* FPSTracker.swift in Sources */,
+				046ED32D2D04290B00BA9AE3 /* DebugOverlayNode.swift in Sources */,
 				04056B0B2CCA13960041B608 /* GameContext.swift in Sources */,
+				625BF1862D03F6E300F6DFC5 /* GameConstants.swift in Sources */,
+				046ED31F2D04118400BA9AE3 /* GameOverNode.swift in Sources */,
+				046ED3292D0428D500BA9AE3 /* ScoreNode.swift in Sources */,
 				04056B0C2CCA13960041B608 /* GameModeType.swift in Sources */,
+				046ED3212D0411B500BA9AE3 /* StartNode.swift in Sources */,
 				04056B0D2CCA13960041B608 /* Dependencies.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,23 +1,23 @@
+////
+////  GameOverView.swift
+////  circle_snap
+////
+////  Created by Duy Nguyen on 11/5/24.
+////
+//import SwiftUI
 //
-//  GameOverView.swift
-//  circle_snap
+//struct GameOverView: View {
+//    @ObservedObject var viewModel: CSViewModel
 //
-//  Created by Duy Nguyen on 11/5/24.
-//
-import SwiftUI
-
-struct GameOverView: View {
-    @ObservedObject var viewModel: CSViewModel
-
-    var body: some View {
-        Text("Game Over")
-            .font(.largeTitle)
-            .foregroundColor(.red)
-        // reset all game state variables
-        Button("Play Again") {
-            viewModel.gameStatus = .inProgress
-            viewModel.gameState.score = 0
-            viewModel.gameState.animationSpeed = 4
-        }
-    }
-}
+//    var body: some View {
+//        Text("Game Over")
+//            .font(.largeTitle)
+//            .foregroundColor(.red)
+//        // reset all game state variables
+//        Button("Play Again") {
+//            viewModel.gameStatus = .inProgress
+//            viewModel.gameState.score = 0
+//            viewModel.gameState.animationSpeed = 4
+//        }
+//    }
+//}
