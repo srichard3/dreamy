@@ -29,6 +29,7 @@
 		625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B182CCA16340041B608 /* CSGameContext.swift */; };
 		625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B172CCA16180041B608 /* CSGameIdleState.swift */; };
 		625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3252D041EC600BA9AE3 /* ContentView.swift */; };
+		625BF2F02D054F2B00F6DFC5 /* Assets.xcassets in Sources */ = {isa = PBXBuildFile; fileRef = 04056ADC2CCA13380041B608 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		04056AD72CCA13370041B608 /* circle_snap */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = circle_snap;
+			sourceTree = "<group>";
+		};
 		04056AE82CCA13390041B608 /* circle_snapTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = circle_snapTests;
@@ -122,6 +128,7 @@
 				04056B022CCA13650041B608 /* Code */,
 				04056AD62CCA13370041B608 /* Products */,
 				04056B092CCA13960041B608 /* Base */,
+				04056AD72CCA13370041B608 /* circle_snap */,
 				04056AE82CCA13390041B608 /* circle_snapTests */,
 				04056AF22CCA13390041B608 /* circle_snapUITests */,
 			);
@@ -233,6 +240,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				04056AD72CCA13370041B608 /* circle_snap */,
 			);
 			name = circle_snap;
 			packageProductDependencies = (
@@ -361,6 +371,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				625BF2F02D054F2B00F6DFC5 /* Assets.xcassets in Sources */,
 				625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */,
 				625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */,
 				625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */,
@@ -541,7 +552,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"circle_snap/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -569,7 +579,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"circle_snap/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

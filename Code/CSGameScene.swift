@@ -1,7 +1,7 @@
 import SpriteKit
 
 class CSGameScene: SKScene {
-    private var gameContext: CSGameContext
+    var gameContext: CSGameContext
     private var conditionManager: GameConditionManager
     
     private var circleNode: SKShapeNode!

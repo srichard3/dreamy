@@ -8,9 +8,9 @@
 import SpriteKit
 
 class GameOverNode: SKNode {
-    let viewModel: CSViewModel
+    let viewModel: CSGameScene
     
-    init(viewModel: CSViewModel) {
+    init(viewModel: CSGameScene) {
         self.viewModel = viewModel
         super.init()
         
@@ -36,9 +36,9 @@ class GameOverNode: SKNode {
     
     func handlePlayAgainTapped() {
         // Reset all game state variables
-        viewModel.gameStatus = .inProgress
-        viewModel.gameState.score = 0
-        viewModel.gameState.animationSpeed = 4
+        viewModel.gameStatus = GameStatus.inProgress
+        viewModel.gameContext.score = 0
+        viewModel.gameContext.animationSpeed = 4
     }
     
     // Detect touch events on the Play Again button
