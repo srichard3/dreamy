@@ -11,8 +11,9 @@ import SpriteKit
 
 
 struct GameConstants {
-    static let circleRadius: CGFloat = 155.0
-    static let nodeRadius: CGFloat = 22
+    static let circleTrackRadius: CGFloat = 150.0
+    static let circleTrackWidth: CGFloat = 50.0
+    static let nodeRadius: CGFloat = 22.5
     static let timerInterval: TimeInterval = 0.0001
     static let shakeDuration: Double = 0.05
     static let scaleAnimationDuration: Double = 0.2

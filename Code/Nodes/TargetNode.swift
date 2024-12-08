@@ -10,8 +10,8 @@ import SpriteKit
 class TargetNode: SKShapeNode {
     init(angle: CGFloat, scale: CGFloat, offset: CGFloat, isGlowing: Bool) {
         super.init()
-        self.path = CGPath(ellipseIn: CGRect(x: -25, y: -25, width: 50, height: 50), transform: nil)
-        self.fillColor = .red
+        self.path = CGPath(ellipseIn: CGRect(x: -25, y: -25, width: 45, height: 45), transform: nil)
+        self.fillColor = SKColor(named: "target")!
         self.position = CGPoint(
             x: offset * cos(angle),
             y: offset * sin(angle)

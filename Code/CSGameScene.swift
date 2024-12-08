@@ -6,7 +6,7 @@ class CSGameScene: SKScene {
     
     private var circleNode: SKShapeNode!
     private var barNode: SKShapeNode!
-//    private var movingIndicatorNode : MovingIndicatorNode!
+    private var movingIndicatorNode : MovingIndicatorNode!
     private var targetNode: SKShapeNode!
     var gameStatus: GameStatus
     
@@ -36,24 +36,21 @@ class CSGameScene: SKScene {
         backgroundColor = .black
         
         // Create circle
-        circleNode = SKShapeNode(circleOfRadius: GameConstants.circleRadius)
-        circleNode.fillColor = .clear
-        circleNode.strokeColor = .white
-        circleNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(circleNode)
-        
-        // Create bar
-//        movingIndicatorNode = MovingIndicatorNode(circleRadius: 2) // x: frame.midX, y: frame.midY)
-        barNode = SKShapeNode(rectOf: CGSize(width: 20, height: 100))
-        barNode.fillColor = .white
-        barNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(barNode)
-        
+        let circleTrackNode = CircleTrackNode(radius: GameConstants.circleTrackRadius,
+                                              lineWidth: GameConstants.circleTrackWidth,
+                                              color: SKColor(named: "circleTrack")!)
+        circleTrackNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(circleTrackNode)
+            
         // Create target node
-        targetNode = SKShapeNode(circleOfRadius: GameConstants.nodeRadius)
-        targetNode.fillColor = .red
+        targetNode = TargetNode(angle: gameContext.progress * 360.0, scale: gameContext.scale, offset: gameContext.shakeOffset, isGlowing: gameContext.isGlowing)
         targetNode.position = calculateTargetNodePosition()
         addChild(targetNode)
+        
+        // Create bar
+        movingIndicatorNode = MovingIndicatorNode(circleRadius: GameConstants.circleTrackRadius)
+        movingIndicatorNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(movingIndicatorNode)
         
         // Setup initial game state
         gameContext.reset()
@@ -91,11 +88,11 @@ class CSGameScene: SKScene {
         let rotationAngle = CGFloat(gameContext.progress * .pi * 2)
 
         // Update bar node's position and rotation
-        let x = frame.midX + CGFloat(GameConstants.circleRadius * cos(rotationAngle - .pi / 2))
-        let y = frame.midY + CGFloat(GameConstants.circleRadius * sin(rotationAngle - .pi / 2))
+        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(rotationAngle - .pi / 2))
+        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(rotationAngle - .pi / 2))
         
-        barNode.position = CGPoint(x: x, y: y)
-        barNode.zRotation = rotationAngle
+        movingIndicatorNode.position = CGPoint(x: x, y: y)
+        movingIndicatorNode.zRotation = rotationAngle
         // moveing.update()
     }
     
@@ -157,8 +154,8 @@ class CSGameScene: SKScene {
     
     private func calculateTargetNodePosition() -> CGPoint {
         let angle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
-        let x = frame.midX + CGFloat(GameConstants.circleRadius * cos(angle))
-        let y = frame.midY + CGFloat(GameConstants.circleRadius * sin(angle))
+        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(angle))
+        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(angle))
         return CGPoint(x: x, y: y)
     }
     
@@ -188,6 +185,6 @@ class CSGameScene: SKScene {
     }
     
     private static func calculateAngleTolerance() -> Double {
-        return ((Double(GameConstants.nodeRadius) / Double(GameConstants.circleRadius)) * 180 / .pi) * 1.75
+        return ((Double(GameConstants.nodeRadius) / Double(GameConstants.circleTrackRadius)) * 180 / .pi) * 1.75
     }
 }
