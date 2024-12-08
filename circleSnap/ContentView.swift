@@ -8,7 +8,7 @@
 import SwiftUI
 import SpriteKit
 
-struct GameView: View {
+struct ContentView: View {
     @StateObject private var gameContext = CSGameContext()
     @StateObject private var conditionManager = GameConditionManager()
     
