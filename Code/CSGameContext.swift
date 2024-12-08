@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class CSGameContext {
+class CSGameContext: ObservableObject {
     var score: Int = 0
     var progress: Double = 0.0
     var randomNodeAngle: Double = 0.0
