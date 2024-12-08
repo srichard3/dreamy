@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 
-class GameConditionManager {
+class GameConditionManager: ObservableObject {
     func updateCondition(for context: CSGameContext) {
         context.currentCondition = GameConstants.conditions.randomElement()!
         context.conditionPatchStartAngle = Double.random(in: 0..<360)

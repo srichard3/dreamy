@@ -21,6 +21,7 @@
 		046ED32B2D0428EC00BA9AE3 /* MovingIndicatorNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED32A2D0428E800BA9AE3 /* MovingIndicatorNode.swift */; };
 		046ED32D2D04290B00BA9AE3 /* DebugOverlayNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED32C2D04290200BA9AE3 /* DebugOverlayNode.swift */; };
 		046ED3332D04294400BA9AE3 /* TargetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3322D04293E00BA9AE3 /* TargetNode.swift */; };
+		046ED39D2D0552BB00BA9AE3 /* circleSnapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED39C2D0552B200BA9AE3 /* circleSnapApp.swift */; };
 		625BF1862D03F6E300F6DFC5 /* GameConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625BF1852D03F6E300F6DFC5 /* GameConstants.swift */; };
 		625BF1882D03F76A00F6DFC5 /* FPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625BF1872D03F76A00F6DFC5 /* FPSTracker.swift */; };
 		625BF2882D05457900F6DFC5 /* CSGameInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B0F2CCA159B0041B608 /* CSGameInfo.swift */; };
@@ -29,6 +30,7 @@
 		625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B182CCA16340041B608 /* CSGameContext.swift */; };
 		625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B172CCA16180041B608 /* CSGameIdleState.swift */; };
 		625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3252D041EC600BA9AE3 /* ContentView.swift */; };
+		625BF2F02D054F2B00F6DFC5 /* Assets.xcassets in Sources */ = {isa = PBXBuildFile; fileRef = 04056ADC2CCA13380041B608 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,27 +74,14 @@
 		046ED32A2D0428E800BA9AE3 /* MovingIndicatorNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovingIndicatorNode.swift; sourceTree = "<group>"; };
 		046ED32C2D04290200BA9AE3 /* DebugOverlayNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugOverlayNode.swift; sourceTree = "<group>"; };
 		046ED3322D04293E00BA9AE3 /* TargetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetNode.swift; sourceTree = "<group>"; };
+		046ED39C2D0552B200BA9AE3 /* circleSnapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = circleSnapApp.swift; sourceTree = "<group>"; };
 		625BF1852D03F6E300F6DFC5 /* GameConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConstants.swift; sourceTree = "<group>"; };
 		625BF1872D03F76A00F6DFC5 /* FPSTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPSTracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		625BF2872D05405E00F6DFC5 /* Exceptions for "circle_snap" folder in "circle_snap" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Utils/FPSTracker.swift,
-				Utils/GameConstants.swift,
-			);
-			target = 04056AD42CCA13370041B608 /* circle_snap */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		04056AD72CCA13370041B608 /* circle_snap */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				625BF2872D05405E00F6DFC5 /* Exceptions for "circle_snap" folder in "circle_snap" target */,
-			);
 			path = circle_snap;
 			sourceTree = "<group>";
 		};
@@ -234,6 +223,7 @@
 		046ED3242D041EB900BA9AE3 /* circleSnap */ = {
 			isa = PBXGroup;
 			children = (
+				046ED39C2D0552B200BA9AE3 /* circleSnapApp.swift */,
 				046ED3252D041EC600BA9AE3 /* ContentView.swift */,
 			);
 			path = circleSnap;
@@ -384,6 +374,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				625BF2F02D054F2B00F6DFC5 /* Assets.xcassets in Sources */,
 				625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */,
 				625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */,
 				625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */,
@@ -404,6 +395,7 @@
 				046ED3292D0428D500BA9AE3 /* ScoreNode.swift in Sources */,
 				04056B0C2CCA13960041B608 /* GameModeType.swift in Sources */,
 				046ED3212D0411B500BA9AE3 /* StartNode.swift in Sources */,
+				046ED39D2D0552BB00BA9AE3 /* circleSnapApp.swift in Sources */,
 				04056B0D2CCA13960041B608 /* Dependencies.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -564,7 +556,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"circle_snap/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -592,7 +583,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"circle_snap/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

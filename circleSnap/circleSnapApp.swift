@@ -1,14 +1,15 @@
 //
-//  circle_snapApp.swift
+//  circleSnapApp.swift
 //  circle_snap
 //
-//  Created by Duy Nguyen on 10/24/24.
+//  Created by Duy Nguyen on 12/7/24.
 //
 
 import SwiftUI
 
 @main
-struct circle_snapApp: App {
+
+struct circleSnapApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
