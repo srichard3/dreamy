@@ -12,13 +12,21 @@ class TargetNode: SKShapeNode {
         super.init()
         self.path = CGPath(ellipseIn: CGRect(x: -25, y: -25, width: 45, height: 45), transform: nil)
         self.fillColor = SKColor(named: "target")!
-        self.position = CGPoint(
-            x: offset * cos(angle),
-            y: offset * sin(angle)
-        )
+//        self.position = CGPoint(
+//            x: offset * cos(angle),
+//            y: offset * sin(angle)
+//        )
         self.setScale(scale)
         if isGlowing {
             self.glowWidth = 10
+        }
+    }
+    
+    func setIsGlowing(isGlowing: Bool) {
+        if(isGlowing){
+            self.glowWidth = 10;
+        }else{
+            self.glowWidth = 0
         }
     }
 

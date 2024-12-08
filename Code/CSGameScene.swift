@@ -7,7 +7,7 @@ class CSGameScene: SKScene {
     private var circleNode: SKShapeNode!
     private var barNode: SKShapeNode!
     private var movingIndicatorNode : MovingIndicatorNode!
-    private var targetNode: SKShapeNode!
+    private var targetNode: TargetNode!
     var gameStatus: GameStatus
     
     private var isReverse: Bool = false
@@ -21,6 +21,7 @@ class CSGameScene: SKScene {
         self.conditionManager = conditionManager
         self.angleTolerance = Self.calculateAngleTolerance()
         self.gameStatus = GameStatus.notStarted
+        self.gameContext.randomNodeAngle = 90
         super.init(size: .zero)
     }
     
@@ -43,8 +44,10 @@ class CSGameScene: SKScene {
         addChild(circleTrackNode)
             
         // Create target node
-        targetNode = TargetNode(angle: gameContext.progress * 360.0, scale: gameContext.scale, offset: gameContext.shakeOffset, isGlowing: gameContext.isGlowing)
+        targetNode = TargetNode(angle: 90, scale: gameContext.scale, offset:  GameConstants.circleTrackRadius, isGlowing: gameContext.isGlowing)
+        gameContext.randomNodeAngle = 90
         targetNode.position = calculateTargetNodePosition()
+
         addChild(targetNode)
         
         // Create bar
@@ -65,7 +68,7 @@ class CSGameScene: SKScene {
     }
     
     private func updateGameState() {
-        let cycleProgress = gameContext.progress
+       // let cycleProgress = gameContext.progress
         var progressChange = isReverse ? -0.01 : 0.01
         
         // Apply condition effects
@@ -81,6 +84,10 @@ class CSGameScene: SKScene {
         if gameContext.progress < 0 {
             gameContext.progress += 1.0
         }
+        // check if circle should glow when clickabke
+
+        targetNode.setIsGlowing(isGlowing: isRectangleInRange());
+
     }
     
     private func updateNodePositions() {
@@ -94,6 +101,7 @@ class CSGameScene: SKScene {
         movingIndicatorNode.position = CGPoint(x: x, y: y)
         movingIndicatorNode.zRotation = rotationAngle
         // moveing.update()
+        
     }
     
     private func checkGameConditions() {
@@ -116,7 +124,7 @@ class CSGameScene: SKScene {
     private func handleTap() {
         didTap = true
         
-        if isRectangleInRange() {
+        if targetNode.glowWidth > 0 {
             handleSuccessfulTap()
         } else {
             handleFailedTap()
@@ -153,9 +161,14 @@ class CSGameScene: SKScene {
     }
     
     private func calculateTargetNodePosition() -> CGPoint {
-        let angle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
-        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(angle))
-        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(angle))
+//        let angle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
+//        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(angle))
+//        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(angle))
+        let rotationAngle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
+
+        // Update bar node's position and rotation
+        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(rotationAngle - .pi / 2))
+        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(rotationAngle - .pi / 2))
         return CGPoint(x: x, y: y)
     }
     
@@ -176,8 +189,9 @@ class CSGameScene: SKScene {
     
     private func isRectangleInRange() -> Bool {
         let normalizedProgress = normalizeAngle(gameContext.progress * 360)
-        let startAngle = normalizeAngle(gameContext.randomNodeAngle - angleTolerance)
-        let endAngle = normalizeAngle(gameContext.randomNodeAngle + angleTolerance)
+        // else the inital node is off
+        let startAngle = normalizeAngle((gameContext.score != 0 ? gameContext.randomNodeAngle: 90) - angleTolerance)
+        let endAngle = normalizeAngle((gameContext.score != 0 ? gameContext.randomNodeAngle: 90) + angleTolerance)
         
         return startAngle < endAngle
             ? normalizedProgress >= startAngle && normalizedProgress <= endAngle
