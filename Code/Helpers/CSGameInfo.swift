@@ -28,7 +28,7 @@ struct GameState {
 }
 
 
-enum ConditionType {
+public enum ConditionType {
     case none
     case sand
     case ice
@@ -37,7 +37,7 @@ enum ConditionType {
 }
 
 
-enum GameStatus {
+public enum GameStatus {
     case gameOver
     case inProgress
     case notStarted

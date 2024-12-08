@@ -23,6 +23,12 @@
 		046ED3332D04294400BA9AE3 /* TargetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3322D04293E00BA9AE3 /* TargetNode.swift */; };
 		625BF1862D03F6E300F6DFC5 /* GameConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625BF1852D03F6E300F6DFC5 /* GameConstants.swift */; };
 		625BF1882D03F76A00F6DFC5 /* FPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625BF1872D03F76A00F6DFC5 /* FPSTracker.swift */; };
+		625BF2882D05457900F6DFC5 /* CSGameInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B0F2CCA159B0041B608 /* CSGameInfo.swift */; };
+		625BF2892D05458200F6DFC5 /* CSLayoutInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B102CCA15AE0041B608 /* CSLayoutInfo.swift */; };
+		625BF28A2D0545A200F6DFC5 /* CSGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B192CCA17C30041B608 /* CSGameScene.swift */; };
+		625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B182CCA16340041B608 /* CSGameContext.swift */; };
+		625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B172CCA16180041B608 /* CSGameIdleState.swift */; };
+		625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED3252D041EC600BA9AE3 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,9 +76,23 @@
 		625BF1872D03F76A00F6DFC5 /* FPSTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPSTracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		625BF2872D05405E00F6DFC5 /* Exceptions for "circle_snap" folder in "circle_snap" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Utils/FPSTracker.swift,
+				Utils/GameConstants.swift,
+			);
+			target = 04056AD42CCA13370041B608 /* circle_snap */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		04056AD72CCA13370041B608 /* circle_snap */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				625BF2872D05405E00F6DFC5 /* Exceptions for "circle_snap" folder in "circle_snap" target */,
+			);
 			path = circle_snap;
 			sourceTree = "<group>";
 		};
@@ -364,6 +384,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				625BF28D2D0545C600F6DFC5 /* ContentView.swift in Sources */,
+				625BF28C2D0545AD00F6DFC5 /* CSGameIdleState.swift in Sources */,
+				625BF28B2D0545A800F6DFC5 /* CSGameContext.swift in Sources */,
+				625BF28A2D0545A200F6DFC5 /* CSGameScene.swift in Sources */,
+				625BF2892D05458200F6DFC5 /* CSLayoutInfo.swift in Sources */,
+				625BF2882D05457900F6DFC5 /* CSGameInfo.swift in Sources */,
 				046ED31D2D0410D900BA9AE3 /* ConditionNode.swift in Sources */,
 				046ED32B2D0428EC00BA9AE3 /* MovingIndicatorNode.swift in Sources */,
 				046ED3332D04294400BA9AE3 /* TargetNode.swift in Sources */,

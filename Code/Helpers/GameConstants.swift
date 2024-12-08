@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftUI
+import SpriteKit
+
 
 struct GameConstants {
     static let circleRadius: CGFloat = 155.0

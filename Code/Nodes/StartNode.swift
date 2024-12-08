@@ -7,10 +7,11 @@
 
 import SpriteKit
 
-class StartNode: SKNode {
-    let viewModel: CSViewModel
 
-    init(viewModel: CSViewModel) {
+class StartNode: SKNode {
+    let viewModel: CSGameScene
+
+    init(viewModel: CSGameScene) {
         self.viewModel = viewModel
         super.init()
 
@@ -32,8 +33,8 @@ class StartNode: SKNode {
 
     // Handle start game action
     func startGame() {
-        viewModel.gameStatus = .inProgress
-        viewModel.onAppear() // Initialize game-related functions
+        viewModel.gameStatus = GameStatus.inProgress
+        viewModel.setupScene() // Initialize game-related functions
     }
 
     // Detect touch events on the Start Game button

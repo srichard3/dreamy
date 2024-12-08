@@ -6,14 +6,16 @@
 //
 
 import Foundation
+import SpriteKit
+
 
 class GameConditionManager {
-    func updateCondition(for context: GameContext) {
+    func updateCondition(for context: CSGameContext) {
         context.currentCondition = GameConstants.conditions.randomElement()!
         context.conditionPatchStartAngle = Double.random(in: 0..<360)
     }
     
-    func applyConditionEffects(progress: Double, context: GameContext) -> Double {
+    func applyConditionEffects(progress: Double, context: CSGameContext) -> Double {
         var progressChange = progress
         
         guard context.isInConditionPatch else {

@@ -8,14 +8,14 @@
 import Foundation
 import SpriteKit
 
-class GameContext {
+class CSGameContext {
     var score: Int = 0
     var progress: Double = 0.0
     var randomNodeAngle: Double = 0.0
     var animationSpeed: Double = 5.0
     var lastClickProgress: Double = 0.0
     
-    var currentCondition: GameCondition = .none
+    var currentCondition: ConditionType = .none
     var isInConditionPatch: Bool = false
     var conditionPatchStartAngle: Double = 0.0
     

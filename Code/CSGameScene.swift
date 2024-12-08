@@ -1,23 +1,25 @@
 import SpriteKit
 
 class CSGameScene: SKScene {
-    private var gameContext: GameContext
+    private var gameContext: CSGameContext
     private var conditionManager: GameConditionManager
     
     private var circleNode: SKShapeNode!
     private var barNode: SKShapeNode!
     private var targetNode: SKShapeNode!
+    var gameStatus: GameStatus
     
     private var isReverse: Bool = false
     private var didTap: Bool = false
     
     private let angleTolerance: Double
     
-    init(gameContext: GameContext = GameContext(),
+    init(gameContext: CSGameContext = CSGameContext(),
          conditionManager: GameConditionManager = GameConditionManager()) {
         self.gameContext = gameContext
         self.conditionManager = conditionManager
         self.angleTolerance = Self.calculateAngleTolerance()
+        self.gameStatus = GameStatus.notStarted
         super.init(size: .zero)
     }
     
@@ -29,7 +31,7 @@ class CSGameScene: SKScene {
         setupScene()
     }
     
-    private func setupScene() {
+    func setupScene() {
         backgroundColor = .black
         
         // Create circle

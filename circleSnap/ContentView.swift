@@ -9,7 +9,7 @@ import SwiftUI
 import SpriteKit
 
 struct GameView: View {
-    @StateObject private var gameContext = GameContext()
+    @StateObject private var gameContext = CSGameContext()
     @StateObject private var conditionManager = GameConditionManager()
     
     var scene: SKScene {
