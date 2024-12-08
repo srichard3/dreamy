@@ -4,10 +4,12 @@ class CSGameScene: SKScene {
     var gameContext: CSGameContext
     private var conditionManager: GameConditionManager
     
-    private var circleNode: SKShapeNode!
-    private var barNode: SKShapeNode!
+    private var circleTrackNode: CircleTrackNode!
     private var movingIndicatorNode : MovingIndicatorNode!
     private var targetNode: TargetNode!
+    private var scoreNode: ScoreNode!
+    private var startNode: StartNode!
+    private var gameOverNode: GameOverNode!
     var gameStatus: GameStatus
     
     private var isReverse: Bool = false
@@ -37,7 +39,7 @@ class CSGameScene: SKScene {
         backgroundColor = .black
         
         // Create circle
-        let circleTrackNode = CircleTrackNode(radius: GameConstants.circleTrackRadius,
+        circleTrackNode = CircleTrackNode(radius: GameConstants.circleTrackRadius,
                                               lineWidth: GameConstants.circleTrackWidth,
                                               color: SKColor(named: "circleTrack")!)
         circleTrackNode.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -54,6 +56,14 @@ class CSGameScene: SKScene {
         movingIndicatorNode = MovingIndicatorNode(circleRadius: GameConstants.circleTrackRadius)
         movingIndicatorNode.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(movingIndicatorNode)
+        
+        // create scoreNode
+        scoreNode = ScoreNode(score: gameContext.score)
+        scoreNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(scoreNode)
+        
+        gameOverNode = GameOverNode(viewModel: self)
+        gameOverNode.position = CGPoint(x: frame.midX, y: frame.midY)
         
         // Setup initial game state
         gameContext.reset()
@@ -133,19 +143,18 @@ class CSGameScene: SKScene {
     
     private func handleSuccessfulTap() {
         gameContext.score += 1
+        scoreNode.updateScore(to: gameContext.score)
         isReverse.toggle()
         
-        // Speed up game
-        if gameContext.animationSpeed > 2 {
-            gameContext.animationSpeed -= GameConstants.speedUpModifier
-        }
         
         // Randomize target node position
         repositionTargetNode()
     }
     
     private func handleFailedTap() {
-        // Game over logic TODO
+        gameStatus = .gameOver
+        removeAllChildren()
+        addChild(gameOverNode)
     }
     
     private func repositionTargetNode() {
