@@ -6,6 +6,7 @@ class CSGameScene: SKScene {
     
     private var circleNode: SKShapeNode!
     private var barNode: SKShapeNode!
+//    private var movingIndicatorNode : MovingIndicatorNode!
     private var targetNode: SKShapeNode!
     var gameStatus: GameStatus
     
@@ -42,6 +43,7 @@ class CSGameScene: SKScene {
         addChild(circleNode)
         
         // Create bar
+//        movingIndicatorNode = MovingIndicatorNode(circleRadius: 2) // x: frame.midX, y: frame.midY)
         barNode = SKShapeNode(rectOf: CGSize(width: 20, height: 100))
         barNode.fillColor = .white
         barNode.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -60,6 +62,7 @@ class CSGameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         updateGameState()
+        // check if circle should glow when clickabke
         updateNodePositions()
         checkGameConditions()
     }
@@ -84,16 +87,16 @@ class CSGameScene: SKScene {
     }
     
     private func updateNodePositions() {
-        // Update bar rotation
+        // Calculate rotation angle based on progress
         let rotationAngle = CGFloat(gameContext.progress * .pi * 2)
+
+        // Update bar node's position and rotation
+        let x = frame.midX + CGFloat(GameConstants.circleRadius * cos(rotationAngle - .pi / 2))
+        let y = frame.midY + CGFloat(GameConstants.circleRadius * sin(rotationAngle - .pi / 2))
+        
+        barNode.position = CGPoint(x: x, y: y)
         barNode.zRotation = rotationAngle
-        
-        // Check if bar is in target range
-        let currentAngle = normalizeAngle(gameContext.progress * 360)
-        let startAngle = normalizeAngle(gameContext.randomNodeAngle - angleTolerance)
-        let endAngle = normalizeAngle(gameContext.randomNodeAngle + angleTolerance)
-        
-        gameContext.isGlowing = isAngleInRange(currentAngle, start: startAngle, end: endAngle)
+        // moveing.update()
     }
     
     private func checkGameConditions() {
@@ -137,7 +140,7 @@ class CSGameScene: SKScene {
     }
     
     private func handleFailedTap() {
-        // Game over logic
+        // Game over logic TODO
     }
     
     private func repositionTargetNode() {
