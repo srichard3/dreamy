@@ -30,7 +30,7 @@ class CSGameContext: ObservableObject {
         score = 0
         progress = 0.0
         randomNodeAngle = Double.random(in: 0..<360)
-        rotationSpeed = 0.05
+        rotationSpeed = 0.005
         currentCondition = .none
         isInConditionPatch = false
         isGlowing = false

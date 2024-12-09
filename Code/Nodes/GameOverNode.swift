@@ -35,17 +35,23 @@ class GameOverNode: SKNode {
     }
     
     func handlePlayAgainTapped() {
-        // Reset all game state variables
-        viewModel.gameStatus = GameStatus.inProgress
-        viewModel.gameContext.score = 0
-        viewModel.gameContext.rotationSpeed = 0.05
+        viewModel.gameStatus = .inProgress
+        viewModel.gameContext.reset()
+        viewModel.removeAllChildren()
+        viewModel.setupScene()
     }
     
     // Detect touch events on the Play Again button
     func handleTouch(at point: CGPoint) {
-        if let playAgainButton = self.childNode(withName: "playAgainButton") as? SKLabelNode,
-           playAgainButton.frame.contains(point) {
-            handlePlayAgainTapped()
+        // Convert touch location to local coordinates
+        let localPoint = self.convert(point, from: self.scene!)
+        
+        if let playAgainButton = self.childNode(withName: "playAgainButton") as? SKLabelNode {
+            let expandedFrame = playAgainButton.frame.insetBy(dx: -10, dy: -10)
+            
+            if expandedFrame.contains(localPoint) {
+                handlePlayAgainTapped()
+            }
         }
     }
 }
