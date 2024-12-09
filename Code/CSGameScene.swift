@@ -7,6 +7,7 @@ class CSGameScene: SKScene {
     private var circleNode: SKShapeNode!
     private var barNode: SKShapeNode!
     private var movingIndicatorNode : MovingIndicatorNode!
+    private var conditionNode : ConditionNode!
     private var targetNode: TargetNode!
     var gameStatus: GameStatus
     
@@ -35,7 +36,7 @@ class CSGameScene: SKScene {
     
     func setupScene() {
         backgroundColor = .black
-        
+       
         // Create circle
         let circleTrackNode = CircleTrackNode(radius: GameConstants.circleTrackRadius,
                                               lineWidth: GameConstants.circleTrackWidth,
@@ -55,9 +56,43 @@ class CSGameScene: SKScene {
         movingIndicatorNode.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(movingIndicatorNode)
         
+//        // Create and add the ConditionNode
+//           let conditionNode = ConditionNode(
+//               weather: gameContext.currentCondition,
+//               startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+//               radius: CGFloat(GameConstants.circleTrackRadius)
+//           )
+//           conditionNode.name = "ConditionNode"
+//           conditionNode.position = CGPoint(x: frame.midX, y: frame.midY)
+//        conditionNode.fillColor = conditionNode.strokeColor
+//           addChild(conditionNode)
+        // Add a pink arc
+          let arcNode = SKShapeNode(path: createArcPath())
+          arcNode.strokeColor = .systemPink   // Set arc outline color
+          arcNode.fillColor = .clear          // No fill color
+          arcNode.lineWidth = 50               // Thickness of the arc
+          arcNode.position = CGPoint(x: frame.midX, y: frame.midY)
+          addChild(arcNode)
+//
         // Setup initial game state
         gameContext.reset()
         conditionManager.updateCondition(for: gameContext)
+    }
+    
+    private func createArcPath() -> CGPath {
+        let path = CGMutablePath()
+        let center = CGPoint(x: 0, y: 0)
+        let startAngle = CGFloat(0)           // Starting angle in radians
+        let endAngle = CGFloat(3.14 / 2)       // 90 degrees (pi/2 radians)
+        let radius = CGFloat(GameConstants.circleTrackRadius)
+
+        path.addArc(center: center,
+                    radius: radius,
+                    startAngle: startAngle,
+                    endAngle: endAngle,
+                    clockwise: false)
+
+        return path
     }
     
     override func update(_ currentTime: TimeInterval) {

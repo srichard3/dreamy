@@ -15,6 +15,9 @@ class GameConditionManager: ObservableObject {
         context.conditionPatchStartAngle = Double.random(in: 0..<360)
     }
     
+    
+    
+    
     func applyConditionEffects(progress: Double, context: CSGameContext) -> Double {
         var progressChange = progress
         
