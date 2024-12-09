@@ -113,7 +113,7 @@ class CSGameScene: SKScene {
         }
         // check if circle should glow when clickabke
 
-        var isGlowing = isRectangleInRange()
+        let isGlowing = isRectangleInRange()
         
         // Check if the user failed to tap in time
         if targetNode.glowWidth > 0 {
@@ -156,7 +156,14 @@ class CSGameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        handleTap()
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        
+        if gameStatus == .gameOver {
+            gameOverNode.handleTouch(at: location)
+        } else {
+            handleTap()
+        }
     }
     
     private func handleTap() {
