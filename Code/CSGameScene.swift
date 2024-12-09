@@ -6,6 +6,7 @@ class CSGameScene: SKScene {
     
     private var circleTrackNode: CircleTrackNode!
     private var movingIndicatorNode : MovingIndicatorNode!
+    private var conditionNode : ConditionNode!
     private var targetNode: TargetNode!
     private var scoreNode: ScoreNode!
     private var startNode: StartNode!
@@ -44,6 +45,16 @@ class CSGameScene: SKScene {
                                               color: SKColor(named: "circleTrack")!)
         circleTrackNode.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(circleTrackNode)
+        
+        // Add dynamic condition node
+        conditionNode = ConditionNode(
+            weather: gameContext.currentCondition,
+            startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+            radius: CGFloat(GameConstants.circleTrackRadius)
+        )
+        conditionNode.name = "ConditionNode"
+        conditionNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(conditionNode)
             
         // Create target node
         targetNode = TargetNode(angle: 90, scale: gameContext.scale, offset:  GameConstants.circleTrackRadius, isGlowing: gameContext.isGlowing)
@@ -75,6 +86,12 @@ class CSGameScene: SKScene {
         // check if circle should glow when clickabke
         updateNodePositions()
         checkGameConditions()
+        if  conditionNode == childNode(withName: "ConditionNode") as? ConditionNode {
+               conditionNode.updateAppearance(
+                   startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                   weather: gameContext.currentCondition
+               )
+        }
     }
     
     private func updateGameState() {
@@ -110,8 +127,6 @@ class CSGameScene: SKScene {
         
         movingIndicatorNode.position = CGPoint(x: x, y: y)
         movingIndicatorNode.zRotation = rotationAngle
-        // moveing.update()
-        
     }
     
     private func checkGameConditions() {
@@ -149,6 +164,15 @@ class CSGameScene: SKScene {
         
         // Randomize target node position
         repositionTargetNode()
+        
+        if Bool.random(){
+            conditionManager.updateCondition(for: gameContext)
+            conditionNode.updateAppearance(
+                startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                weather: gameContext.currentCondition
+            )
+        }
+       
     }
     
     private func handleFailedTap() {
@@ -170,9 +194,6 @@ class CSGameScene: SKScene {
     }
     
     private func calculateTargetNodePosition() -> CGPoint {
-//        let angle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
-//        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(angle))
-//        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(angle))
         let rotationAngle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
 
         // Update bar node's position and rotation
