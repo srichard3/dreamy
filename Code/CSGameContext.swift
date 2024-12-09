@@ -10,9 +10,9 @@ import SpriteKit
 
 class CSGameContext: ObservableObject {
     var score: Int = 0
-    var progress: Double = 0.0
-    var randomNodeAngle: Double = 0.0
-    var animationSpeed: Double = 5.0
+    var progress: Double = Double.random(in: 0..<1)
+    var randomNodeAngle: Double = Double.random(in: 0..<360)
+    var rotationSpeed: Double = 0.005
     var lastClickProgress: Double = 0.0
     
     var currentCondition: ConditionType = .none
@@ -30,7 +30,7 @@ class CSGameContext: ObservableObject {
         score = 0
         progress = 0.0
         randomNodeAngle = Double.random(in: 0..<360)
-        animationSpeed = 5.0
+        rotationSpeed = 0.05
         currentCondition = .none
         isInConditionPatch = false
         isGlowing = false

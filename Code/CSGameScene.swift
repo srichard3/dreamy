@@ -4,9 +4,13 @@ class CSGameScene: SKScene {
     var gameContext: CSGameContext
     private var conditionManager: GameConditionManager
     
-    private var circleNode: SKShapeNode!
-    private var barNode: SKShapeNode!
-    private var targetNode: SKShapeNode!
+    private var circleTrackNode: CircleTrackNode!
+    private var movingIndicatorNode : MovingIndicatorNode!
+    private var conditionNode : ConditionNode!
+    private var targetNode: TargetNode!
+    private var scoreNode: ScoreNode!
+    private var startNode: StartNode!
+    private var gameOverNode: GameOverNode!
     var gameStatus: GameStatus
     
     private var isReverse: Bool = false
@@ -20,6 +24,7 @@ class CSGameScene: SKScene {
         self.conditionManager = conditionManager
         self.angleTolerance = Self.calculateAngleTolerance()
         self.gameStatus = GameStatus.notStarted
+        self.gameContext.randomNodeAngle = 90
         super.init(size: .zero)
     }
     
@@ -35,23 +40,41 @@ class CSGameScene: SKScene {
         backgroundColor = .black
         
         // Create circle
-        circleNode = SKShapeNode(circleOfRadius: GameConstants.circleRadius)
-        circleNode.fillColor = .clear
-        circleNode.strokeColor = .white
-        circleNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(circleNode)
+        circleTrackNode = CircleTrackNode(radius: GameConstants.circleTrackRadius,
+                                              lineWidth: GameConstants.circleTrackWidth,
+                                              color: SKColor(named: "circleTrack")!)
+        circleTrackNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(circleTrackNode)
+        
+        // Add dynamic condition node
+        conditionNode = ConditionNode(
+            weather: gameContext.currentCondition,
+            startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+            radius: CGFloat(GameConstants.circleTrackRadius)
+        )
+        conditionNode.name = "ConditionNode"
+        conditionNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(conditionNode)
+            
+        // Create target node
+        targetNode = TargetNode(angle: 90, scale: gameContext.scale, offset:  GameConstants.circleTrackRadius, isGlowing: gameContext.isGlowing)
+        gameContext.randomNodeAngle = 90
+        targetNode.position = calculateTargetNodePosition()
+
+        addChild(targetNode)
         
         // Create bar
-        barNode = SKShapeNode(rectOf: CGSize(width: 20, height: 100))
-        barNode.fillColor = .white
-        barNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(barNode)
+        movingIndicatorNode = MovingIndicatorNode(circleRadius: GameConstants.circleTrackRadius)
+        movingIndicatorNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(movingIndicatorNode)
         
-        // Create target node
-        targetNode = SKShapeNode(circleOfRadius: GameConstants.nodeRadius)
-        targetNode.fillColor = .red
-        targetNode.position = calculateTargetNodePosition()
-        addChild(targetNode)
+        // create scoreNode
+        scoreNode = ScoreNode(score: gameContext.score)
+        scoreNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(scoreNode)
+        
+        gameOverNode = GameOverNode(viewModel: self)
+        gameOverNode.position = CGPoint(x: frame.midX, y: frame.midY)
         
         // Setup initial game state
         gameContext.reset()
@@ -60,12 +83,19 @@ class CSGameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         updateGameState()
+        // check if circle should glow when clickabke
         updateNodePositions()
         checkGameConditions()
+        if  conditionNode == childNode(withName: "ConditionNode") as? ConditionNode {
+               conditionNode.updateAppearance(
+                   startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                   weather: gameContext.currentCondition
+               )
+        }
     }
     
     private func updateGameState() {
-        let cycleProgress = gameContext.progress
+       // let cycleProgress = gameContext.progress
         var progressChange = isReverse ? -0.01 : 0.01
         
         // Apply condition effects
@@ -81,19 +111,35 @@ class CSGameScene: SKScene {
         if gameContext.progress < 0 {
             gameContext.progress += 1.0
         }
+        // check if circle should glow when clickabke
+
+        var isGlowing = isRectangleInRange()
+        
+        // Check if the user failed to tap in time
+        if targetNode.glowWidth > 0 {
+            if !didTap && !isGlowing && gameContext.score > 0 {
+                // The bar passed the target without a valid tap
+                handleFailedTap()
+            } else if didTap {
+                // Reset didTap after processing a successful or failed tap
+                didTap = false
+            }
+        }
+        
+        targetNode.setIsGlowing(isGlowing: isGlowing);
+
     }
     
     private func updateNodePositions() {
-        // Update bar rotation
+        // Calculate rotation angle based on progress
         let rotationAngle = CGFloat(gameContext.progress * .pi * 2)
-        barNode.zRotation = rotationAngle
+
+        // Update bar node's position and rotation
+        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(rotationAngle - .pi / 2))
+        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(rotationAngle - .pi / 2))
         
-        // Check if bar is in target range
-        let currentAngle = normalizeAngle(gameContext.progress * 360)
-        let startAngle = normalizeAngle(gameContext.randomNodeAngle - angleTolerance)
-        let endAngle = normalizeAngle(gameContext.randomNodeAngle + angleTolerance)
-        
-        gameContext.isGlowing = isAngleInRange(currentAngle, start: startAngle, end: endAngle)
+        movingIndicatorNode.position = CGPoint(x: x, y: y)
+        movingIndicatorNode.zRotation = rotationAngle
     }
     
     private func checkGameConditions() {
@@ -116,7 +162,7 @@ class CSGameScene: SKScene {
     private func handleTap() {
         didTap = true
         
-        if isRectangleInRange() {
+        if targetNode.glowWidth > 0 {
             handleSuccessfulTap()
         } else {
             handleFailedTap()
@@ -125,19 +171,27 @@ class CSGameScene: SKScene {
     
     private func handleSuccessfulTap() {
         gameContext.score += 1
+        scoreNode.updateScore(to: gameContext.score)
         isReverse.toggle()
         
-        // Speed up game
-        if gameContext.animationSpeed > 2 {
-            gameContext.animationSpeed -= GameConstants.speedUpModifier
-        }
         
         // Randomize target node position
         repositionTargetNode()
+        
+        if Bool.random(){
+            conditionManager.updateCondition(for: gameContext)
+            conditionNode.updateAppearance(
+                startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                weather: gameContext.currentCondition
+            )
+        }
+       
     }
     
     private func handleFailedTap() {
-        // Game over logic
+        gameStatus = .gameOver
+        removeAllChildren()
+        addChild(gameOverNode)
     }
     
     private func repositionTargetNode() {
@@ -153,9 +207,11 @@ class CSGameScene: SKScene {
     }
     
     private func calculateTargetNodePosition() -> CGPoint {
-        let angle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
-        let x = frame.midX + CGFloat(GameConstants.circleRadius * cos(angle))
-        let y = frame.midY + CGFloat(GameConstants.circleRadius * sin(angle))
+        let rotationAngle = CGFloat(gameContext.randomNodeAngle * .pi / 180)
+
+        // Update bar node's position and rotation
+        let x = frame.midX + CGFloat(GameConstants.circleTrackRadius * cos(rotationAngle - .pi / 2))
+        let y = frame.midY + CGFloat(GameConstants.circleTrackRadius * sin(rotationAngle - .pi / 2))
         return CGPoint(x: x, y: y)
     }
     
@@ -176,8 +232,9 @@ class CSGameScene: SKScene {
     
     private func isRectangleInRange() -> Bool {
         let normalizedProgress = normalizeAngle(gameContext.progress * 360)
-        let startAngle = normalizeAngle(gameContext.randomNodeAngle - angleTolerance)
-        let endAngle = normalizeAngle(gameContext.randomNodeAngle + angleTolerance)
+        // else the inital node is off
+        let startAngle = normalizeAngle((gameContext.score != 0 ? gameContext.randomNodeAngle: 90) - angleTolerance)
+        let endAngle = normalizeAngle((gameContext.score != 0 ? gameContext.randomNodeAngle: 90) + angleTolerance)
         
         return startAngle < endAngle
             ? normalizedProgress >= startAngle && normalizedProgress <= endAngle
@@ -185,6 +242,6 @@ class CSGameScene: SKScene {
     }
     
     private static func calculateAngleTolerance() -> Double {
-        return ((Double(GameConstants.nodeRadius) / Double(GameConstants.circleRadius)) * 180 / .pi) * 1.75
+        return ((Double(GameConstants.nodeRadius) / Double(GameConstants.circleTrackRadius)) * 180 / .pi) * 1.75
     }
 }

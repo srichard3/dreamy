@@ -9,12 +9,7 @@ struct GameState {
     var shakeOffset: CGFloat = 0.0
     var isGlowing: Bool = false
     var lastClickProgress: Double = 0.0
-    
-    // Score and timer system
-    var score: Int = 0
-    var gameTimer: Int = 5
-    var timer: Timer?
-    
+        
     // Animation modifiers
     var animationSpeed: Double = 3.5
     

@@ -21,9 +21,7 @@ class CircleTrackNode: SKShapeNode {
         // Configure the stroke
         self.strokeColor = color.withAlphaComponent(0.8)
         self.lineWidth = lineWidth
-
-        // Optional: Add effects like glow or shadow
-        self.glowWidth = 5.0
+        
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -11,13 +11,15 @@ import SpriteKit
 
 
 struct GameConstants {
-    static let circleRadius: CGFloat = 155.0
-    static let nodeRadius: CGFloat = 22
+    static let circleTrackRadius: CGFloat = 150.0
+    static let circleTrackWidth: CGFloat = 50.0
+    static let nodeRadius: CGFloat = 22.5
     static let timerInterval: TimeInterval = 0.0001
     static let shakeDuration: Double = 0.05
     static let scaleAnimationDuration: Double = 0.2
     
     static let speedUpModifier: Double = 0.10
+    
     
     static let conditionEventDuration: TimeInterval = 10.0
     static let conditionPatchSize: Double = 80.0
@@ -29,6 +31,6 @@ struct GameConstants {
     static let iceMinAdjustment = 0.3
     static let iceMaxAdjustment = 1.4
     
-    static let conditions: [ConditionType] = [.wind, .ice, .sand, .fog]
+    static let conditions: [ConditionType] = [.wind, .sand, .fog]
 }
     
