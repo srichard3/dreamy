@@ -113,7 +113,20 @@ class CSGameScene: SKScene {
         }
         // check if circle should glow when clickabke
 
-        targetNode.setIsGlowing(isGlowing: isRectangleInRange());
+        var isGlowing = isRectangleInRange()
+        
+        // Check if the user failed to tap in time
+        if targetNode.glowWidth > 0 {
+            if !didTap && !isGlowing && gameContext.score > 0 {
+                // The bar passed the target without a valid tap
+                handleFailedTap()
+            } else if didTap {
+                // Reset didTap after processing a successful or failed tap
+                didTap = false
+            }
+        }
+        
+        targetNode.setIsGlowing(isGlowing: isGlowing);
 
     }
     
