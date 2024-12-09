@@ -13,10 +13,10 @@ class MovingIndicatorNode: SKNode {
 
     init(circleRadius: CGFloat) {
         self.circleRadius = circleRadius
-        self.indicator = SKShapeNode(rectOf: CGSize(width: 20, height: 48), cornerRadius: 20)
+        self.indicator = SKShapeNode(rectOf: CGSize(width: 20, height: 48), cornerRadius: 10)
         super.init()
         
-        indicator.fillColor = SKColor(named: "circleTrack")!
+        indicator.fillColor = SKColor(named: "movingIndicator")!
         indicator.lineWidth = 0
         addChild(indicator)
     }

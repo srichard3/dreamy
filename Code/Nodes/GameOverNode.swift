@@ -38,7 +38,7 @@ class GameOverNode: SKNode {
         // Reset all game state variables
         viewModel.gameStatus = GameStatus.inProgress
         viewModel.gameContext.score = 0
-        viewModel.gameContext.animationSpeed = 4
+        viewModel.gameContext.rotationSpeed = 0.05
     }
     
     // Detect touch events on the Play Again button
