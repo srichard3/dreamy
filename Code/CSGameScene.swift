@@ -11,7 +11,6 @@ class CSGameScene: SKScene {
     private var scoreNode: ScoreNode!
     private var startNode: StartNode!
     private var gameOverNode: GameOverNode!
-    var gameStatus: GameStatus
     
     private var isReverse: Bool = false
     private var didTap: Bool = false
@@ -23,8 +22,7 @@ class CSGameScene: SKScene {
         self.gameContext = gameContext
         self.conditionManager = conditionManager
         self.angleTolerance = Self.calculateAngleTolerance()
-        self.gameStatus = GameStatus.notStarted
-        self.gameContext.randomNodeAngle = 90
+        self.gameContext.randomNodeAngle = Double.random(in: 0..<360)
         super.init(size: .zero)
     }
     
@@ -38,43 +36,56 @@ class CSGameScene: SKScene {
     
     func setupScene() {
         backgroundColor = .black
+        removeAllChildren()
+        
+        switch (gameContext.currentGameStatus) {
+        case .notStarted:
+            startNode = StartNode(viewModel: self)
+            startNode.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(startNode)
+            
+        case .inProgress:
+            circleTrackNode = CircleTrackNode(radius: GameConstants.circleTrackRadius,
+                                                  lineWidth: GameConstants.circleTrackWidth,
+                                                  color: SKColor(named: "circleTrack")!)
+            circleTrackNode.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(circleTrackNode)
+            
+            // Add dynamic condition node
+            conditionNode = ConditionNode(
+                weather: gameContext.currentCondition,
+                startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                radius: CGFloat(GameConstants.circleTrackRadius)
+            )
+            conditionNode.name = "ConditionNode"
+            conditionNode.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(conditionNode)
+                
+            // Create target node
+            targetNode = TargetNode(angle: 90, scale: gameContext.scale, offset:  GameConstants.circleTrackRadius, isGlowing: gameContext.isGlowing)
+            gameContext.randomNodeAngle = 90
+            targetNode.position = calculateTargetNodePosition()
+
+            addChild(targetNode)
+            
+            // Create bar
+            movingIndicatorNode = MovingIndicatorNode(circleRadius: GameConstants.circleTrackRadius)
+            movingIndicatorNode.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(movingIndicatorNode)
+            
+            // create scoreNode
+            scoreNode = ScoreNode(score: gameContext.score)
+            scoreNode.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(scoreNode)
+            
+        case .gameOver:
+            gameOverNode = GameOverNode(viewModel: self)
+            gameOverNode.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(gameOverNode)
+        }
         
         // Create circle
-        circleTrackNode = CircleTrackNode(radius: GameConstants.circleTrackRadius,
-                                              lineWidth: GameConstants.circleTrackWidth,
-                                              color: SKColor(named: "circleTrack")!)
-        circleTrackNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(circleTrackNode)
-        
-        // Add dynamic condition node
-        conditionNode = ConditionNode(
-            weather: gameContext.currentCondition,
-            startAngle: CGFloat(gameContext.conditionPatchStartAngle),
-            radius: CGFloat(GameConstants.circleTrackRadius)
-        )
-        conditionNode.name = "ConditionNode"
-        conditionNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(conditionNode)
-            
-        // Create target node
-        targetNode = TargetNode(angle: 90, scale: gameContext.scale, offset:  GameConstants.circleTrackRadius, isGlowing: gameContext.isGlowing)
-        gameContext.randomNodeAngle = 90
-        targetNode.position = calculateTargetNodePosition()
-
-        addChild(targetNode)
-        
-        // Create bar
-        movingIndicatorNode = MovingIndicatorNode(circleRadius: GameConstants.circleTrackRadius)
-        movingIndicatorNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(movingIndicatorNode)
-        
-        // create scoreNode
-        scoreNode = ScoreNode(score: gameContext.score)
-        scoreNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(scoreNode)
-        
-        gameOverNode = GameOverNode(viewModel: self)
-        gameOverNode.position = CGPoint(x: frame.midX, y: frame.midY)
+                
         
         // Setup initial game state
         gameContext.reset()
@@ -82,15 +93,17 @@ class CSGameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        updateGameState()
-        // check if circle should glow when clickabke
-        updateNodePositions()
-        checkGameConditions()
-        if  conditionNode == childNode(withName: "ConditionNode") as? ConditionNode {
-               conditionNode.updateAppearance(
-                   startAngle: CGFloat(gameContext.conditionPatchStartAngle),
-                   weather: gameContext.currentCondition
-               )
+        if gameContext.currentGameStatus == .inProgress {
+            updateGameState()
+            // check if circle should glow when clickabke
+            updateNodePositions()
+            checkGameConditions()
+            if  conditionNode == childNode(withName: "ConditionNode") as? ConditionNode {
+                   conditionNode.updateAppearance(
+                       startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                       weather: gameContext.currentCondition
+                   )
+            }
         }
     }
     
@@ -159,8 +172,10 @@ class CSGameScene: SKScene {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         
-        if gameStatus == .gameOver {
+        if gameContext.currentGameStatus == .gameOver {
             gameOverNode.handleTouch(at: location)
+        } else if gameContext.currentGameStatus == .notStarted {
+            startNode.handleTouch(at: location)
         } else {
             handleTap()
         }
@@ -196,9 +211,8 @@ class CSGameScene: SKScene {
     }
     
     private func handleFailedTap() {
-        gameStatus = .gameOver
-        removeAllChildren()
-        addChild(gameOverNode)
+        gameContext.currentGameStatus = .gameOver
+        setupScene()
     }
     
     private func repositionTargetNode() {

@@ -33,14 +33,15 @@ class StartNode: SKNode {
 
     // Handle start game action
     func startGame() {
-        viewModel.gameStatus = GameStatus.inProgress
+        viewModel.gameContext.currentGameStatus = .inProgress
         viewModel.setupScene() // Initialize game-related functions
     }
 
     // Detect touch events on the Start Game button
     func handleTouch(at point: CGPoint) {
+        let localPoint = self.convert(point, from: self.scene!)
         if let startGameLabel = self.childNode(withName: "startGameButton") as? SKLabelNode,
-           startGameLabel.frame.contains(point) {
+           startGameLabel.frame.contains(localPoint) {
             startGame()
         }
     }

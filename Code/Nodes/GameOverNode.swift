@@ -35,7 +35,7 @@ class GameOverNode: SKNode {
     }
     
     func handlePlayAgainTapped() {
-        viewModel.gameStatus = .inProgress
+        viewModel.gameContext.currentGameStatus = .inProgress
         viewModel.gameContext.reset()
         viewModel.removeAllChildren()
         viewModel.setupScene()

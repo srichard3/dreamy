@@ -26,6 +26,8 @@ class CSGameContext: ObservableObject {
     var scale: CGFloat = 1.0
     var shakeOffset: CGFloat = 0.0
     
+    var currentGameStatus: GameStatus = .notStarted
+    
     func reset() {
         score = 0
         progress = 0.0
