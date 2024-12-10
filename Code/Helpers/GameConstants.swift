@@ -18,7 +18,7 @@ struct GameConstants {
     static let shakeDuration: Double = 0.05
     static let scaleAnimationDuration: Double = 0.2
     
-    static let speedUpModifier: Double = 0.10
+    static let speedUpModifier: Double = 0.03 // testing I like 3
     
     
     static let conditionEventDuration: TimeInterval = 10.0

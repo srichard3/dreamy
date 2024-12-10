@@ -11,9 +11,13 @@ class CSGameScene: SKScene {
     private var scoreNode: ScoreNode!
     private var startNode: StartNode!
     private var gameOverNode: GameOverNode!
+    private var timerNode: TimerNode!
+
     
     private var isReverse: Bool = false
     private var didTap: Bool = false
+    private var nextConditionUpdate: TimeInterval = 0
+    private var lastUpdateTime: TimeInterval = 0
     
     private let angleTolerance: Double
     
@@ -52,14 +56,22 @@ class CSGameScene: SKScene {
             addChild(circleTrackNode)
             
             // Add dynamic condition node
-            conditionNode = ConditionNode(
-                weather: gameContext.currentCondition,
-                startAngle: CGFloat(gameContext.conditionPatchStartAngle),
-                radius: CGFloat(GameConstants.circleTrackRadius)
-            )
-            conditionNode.name = "ConditionNode"
-            conditionNode.position = CGPoint(x: frame.midX, y: frame.midY)
-            addChild(conditionNode)
+                   conditionNode = ConditionNode(
+                    weather: ConditionType.none,
+                       startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                       radius: CGFloat(GameConstants.circleTrackRadius)
+                   )
+                   conditionNode.name = "ConditionNode"
+                   conditionNode.position = CGPoint(x: frame.midX, y: frame.midY)
+                   addChild(conditionNode)
+                        
+            timerNode = TimerNode()
+            timerNode.position = CGPoint(x: frame.midX, y: frame.height * 0.9) // Adjust position as needed
+            timerNode.onTimerEnd = { [weak self] in
+                self?.handleFailedTap() // Handle game over if timer reaches 0
+            }
+            addChild(timerNode)
+            timerNode.startCountdown()
                 
             // Create target node
             targetNode = TargetNode(angle: 90, scale: gameContext.scale, offset:  GameConstants.circleTrackRadius, isGlowing: gameContext.isGlowing)
@@ -90,6 +102,7 @@ class CSGameScene: SKScene {
         // Setup initial game state
         gameContext.reset()
         conditionManager.updateCondition(for: gameContext)
+        gameContext.currentCondition = ConditionType.none
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -98,12 +111,24 @@ class CSGameScene: SKScene {
             // check if circle should glow when clickabke
             updateNodePositions()
             checkGameConditions()
-            if  conditionNode == childNode(withName: "ConditionNode") as? ConditionNode {
-                   conditionNode.updateAppearance(
-                       startAngle: CGFloat(gameContext.conditionPatchStartAngle),
-                       weather: gameContext.currentCondition
-                   )
+            if lastUpdateTime > 0 {
+                let deltaTime = currentTime - lastUpdateTime
+                if deltaTime >= nextConditionUpdate {
+                    if gameContext.score >= 5 {
+                        conditionManager.updateCondition(for: gameContext)
+                        conditionNode.updateAppearance(
+                            startAngle: CGFloat(gameContext.conditionPatchStartAngle),
+                            weather: gameContext.currentCondition
+                        )
+                    }
+                    nextConditionUpdate = 10 + TimeInterval(Int.random(in: 0...5)) // Reset for the next update
+                    lastUpdateTime = currentTime // Update the last update time
+                }
+            } else {
+                // Initialize lastUpdateTime on the first frame
+                lastUpdateTime = currentTime
             }
+            
         }
     }
     
@@ -111,12 +136,18 @@ class CSGameScene: SKScene {
        // let cycleProgress = gameContext.progress
         var progressChange = isReverse ? -0.01 : 0.01
         
+        // Adjust progress change based on speed-up modifier and score
+        let speedMultiplier = 1.0 + (Double(gameContext.score) * GameConstants.speedUpModifier)
+        progressChange *= speedMultiplier
+
         // Apply condition effects
-        progressChange = conditionManager.applyConditionEffects(
-            progress: progressChange,
-            context: gameContext
-        )
-        
+        // Enable condition effects after score reaches 5
+        if gameContext.score >= 5 {
+            progressChange = conditionManager.applyConditionEffects(
+                progress: progressChange,
+                context: gameContext
+            )
+        }
         gameContext.progress += progressChange
         
         // Ensure progress stays within 0-1 range
@@ -127,17 +158,6 @@ class CSGameScene: SKScene {
         // check if circle should glow when clickabke
 
         let isGlowing = isRectangleInRange()
-        
-        // Check if the user failed to tap in time
-        if targetNode.glowWidth > 0 {
-            if !didTap && !isGlowing && gameContext.score > 0 {
-                // The bar passed the target without a valid tap
-                handleFailedTap()
-            } else if didTap {
-                // Reset didTap after processing a successful or failed tap
-                didTap = false
-            }
-        }
         
         targetNode.setIsGlowing(isGlowing: isGlowing);
 
@@ -196,18 +216,10 @@ class CSGameScene: SKScene {
         scoreNode.updateScore(to: gameContext.score)
         isReverse.toggle()
         
-        
         // Randomize target node position
         repositionTargetNode()
-        
-        if Bool.random(){
-            conditionManager.updateCondition(for: gameContext)
-            conditionNode.updateAppearance(
-                startAngle: CGFloat(gameContext.conditionPatchStartAngle),
-                weather: gameContext.currentCondition
-            )
-        }
-       
+        // Reset timer
+        timerNode.resetCountdown()
     }
     
     private func handleFailedTap() {
