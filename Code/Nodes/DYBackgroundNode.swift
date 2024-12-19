@@ -231,18 +231,17 @@ class DYBackgroundNode: SKNode {
         let scalingSequence = SKAction.sequence([scaleUp, scaleDown])
         let scalingForever = SKAction.repeatForever(scalingSequence)
         
-        // Combine floating and scaling
         let group = SKAction.group([floatingForever, scalingForever])
         node.run(group)
     }
     
     private func applyTwinkling(to node: SKSpriteNode) {
-        let duration = CGFloat.random(in: 1.0...3.0)
+        let duration = CGFloat.random(in: 3.0...5.0)
         let scaleRange: CGFloat = 0.1
         
-        let scaleUp = SKAction.scale(by: 1.0 + scaleRange, duration: duration / 2)
+        let scaleUp = SKAction.scale(to: 1.0 + scaleRange, duration: duration / 2)
         scaleUp.timingMode = .easeInEaseOut
-        let scaleDown = SKAction.scale(by: 1.0 - scaleRange, duration: duration / 2)
+        let scaleDown = SKAction.scale(to: 1.0, duration: duration / 2)
         scaleDown.timingMode = .easeInEaseOut
         let twinkleSequence = SKAction.sequence([scaleUp, scaleDown])
         let twinkleForever = SKAction.repeatForever(twinkleSequence)
@@ -252,11 +251,11 @@ class DYBackgroundNode: SKNode {
     
     private func applyPulsing(to node: SKSpriteNode) {
         let duration = CGFloat.random(in: 2.0...4.0)
-        let scaleRange: CGFloat = 0.05
+        let scaleRange: CGFloat = 0.1
         
-        let scaleUp = SKAction.scale(by: 1.0 + scaleRange, duration: duration / 2)
+        let scaleUp = SKAction.scale(to: 1.0 + scaleRange, duration: duration / 2)
         scaleUp.timingMode = .easeInEaseOut
-        let scaleDown = SKAction.scale(by: 1.0 - scaleRange, duration: duration / 2)
+        let scaleDown = SKAction.scale(to: 1.0, duration: duration / 2)
         scaleDown.timingMode = .easeInEaseOut
         let pulsingSequence = SKAction.sequence([scaleUp, scaleDown])
         let pulsingForever = SKAction.repeatForever(pulsingSequence)
