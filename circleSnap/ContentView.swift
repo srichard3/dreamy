@@ -9,22 +9,17 @@ import SwiftUI
 import SpriteKit
 
 struct ContentView: View {
-    @StateObject private var gameContext = CSGameContext()
-    @StateObject private var conditionManager = GameConditionManager()
-    
-    var scene: SKScene {
-        let scene = CSGameScene(gameContext: gameContext,
-                                conditionManager: conditionManager)
-        scene.size = CGSize(width: UIScreen.main.bounds.width,
-                             height: UIScreen.main.bounds.height)
-        scene.scaleMode = .aspectFill
-        return scene
-    }
+    @StateObject private var context = DYGameContext(dependencies: .init(), gameMode: .single)
     
     var body: some View {
-        SpriteView(scene: scene)
-            .ignoresSafeArea()
+        ZStack {
+            SpriteView(scene: context.scene!, debugOptions: [.showsFPS, .showsNodeCount])
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .edgesIgnoringSafeArea(.all)
+        }
+        .statusBarHidden()
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
