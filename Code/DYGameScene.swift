@@ -34,7 +34,7 @@ class DYGameScene: SKScene {
     private var isReverse: Bool = false
     private var isTouchingConditionNode: Bool = false
     
-    public var didShowTutorial: Bool = true
+    public var didShowTutorial: Bool = false
     private var tutorialConditions: [DYConditionType] = [.ice, .sand, .mud, .fog]
     private var currentTutorialIndex = 0
     private var tutorialShowingTapToContinue = false

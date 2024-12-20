@@ -16,7 +16,7 @@ struct DYLayoutInfo {
     static let minimumConditionScore: Int = 5
     
     static let baseSpeed: Double = 0.005
-    static let speedUpMultiplier: Double = 0.75
+    static let speedUpMultiplier: Double = 0.075
     
     static let iceSpeedMultiplier: Double = 1.5
     static let sandSpeedMultiplier: Double = 0.5
