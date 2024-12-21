@@ -101,6 +101,8 @@ class DYGameOverNode: SKNode {
         guard isTapToContinueActive else { return }
         
         gameScene.tapFeedbackGenerator.impactOccurred()
+        let soundAction = SKAction.playSoundFileNamed("dy_button.mp3", waitForCompletion: false)
+        run(soundAction)
         
         handleRestartTapped()
     }

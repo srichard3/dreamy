@@ -17,7 +17,6 @@ class DYTimerProgressNode: SKShapeNode {
     var onTimerEnd: (() -> Void)?
     
     let startColor: UIColor = .white
-    //    let startColor: UIColor = UIColor(hex: "#7379B0")
     let endColor: UIColor = UIColor(hex: "#F3504C")
     
     let colorStartThreshold: CGFloat = 0.5
@@ -89,7 +88,7 @@ class DYTimerProgressNode: SKShapeNode {
     }
     
     private func createPath(progress: Double) -> CGPath {
-        let startAngle = -CGFloat.pi / 2 // Start at top
+        let startAngle = -CGFloat.pi / 2
         let endAngle = startAngle + CGFloat(progress * 2 * Double.pi)
         
         let path = CGMutablePath()

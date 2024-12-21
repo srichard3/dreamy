@@ -33,8 +33,10 @@ class DYStartNode: SKNode {
         let localPoint = self.convert(point, from: self.scene!)
         if let startGameLabel = self.childNode(withName: "startGameButton") as? SKSpriteNode,
            startGameLabel.frame.contains(localPoint) {
+            gameScene.tapFeedbackGenerator.impactOccurred()
+            let soundAction = SKAction.playSoundFileNamed("dy_button.mp3", waitForCompletion: false)
+            run(soundAction)
             animateButtonPress {
-                self.gameScene.tapFeedbackGenerator.impactOccurred()
                 if !self.gameScene.didShowTutorial {
                     self.gameScene.startTutorial()
                 } else {

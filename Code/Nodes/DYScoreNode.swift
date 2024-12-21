@@ -18,7 +18,7 @@ class DYScoreNode: SKNode {
         label.fontColor = UIColor(hex: "#FAFAFA")
         label.text = "\(score)"
         label.verticalAlignmentMode = .center
-//        addStroke() // buggy with this font
+//        addStroke() // buggy with Baloo font
 
         addChild(label)
     }
@@ -47,7 +47,7 @@ class DYScoreNode: SKNode {
         let oldScore = Int(label.text ?? "0") ?? 0
 
         label.text = "\(newScore)"
-//        addStroke()
+//        addStroke() // buggy with Baloo font
 
         if newScore > oldScore {
             animateScoreIncrease()

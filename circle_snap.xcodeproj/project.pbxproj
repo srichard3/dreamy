@@ -22,6 +22,12 @@
 		625BF1862D03F6E300F6DFC5 /* DYLayoutInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625BF1852D03F6E300F6DFC5 /* DYLayoutInfo.swift */; };
 		625BF28A2D0545A200F6DFC5 /* DYGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04056B192CCA17C30041B608 /* DYGameScene.swift */; };
 		625BF2F02D054F2B00F6DFC5 /* Assets.xcassets in Sources */ = {isa = PBXBuildFile; fileRef = 04056ADC2CCA13380041B608 /* Assets.xcassets */; };
+		9E428A3D2D1689E200ADD8D6 /* DYSoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E428A3C2D1689DE00ADD8D6 /* DYSoundManager.swift */; };
+		9E428A3F2D168A6500ADD8D6 /* dy_bg_music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9E428A3E2D168A6500ADD8D6 /* dy_bg_music.mp3 */; };
+		9E428A422D168AAD00ADD8D6 /* dy_condition_whistle.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9E428A412D168AAD00ADD8D6 /* dy_condition_whistle.mp3 */; };
+		9E428A482D168B0500ADD8D6 /* dy_button.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9E428A472D168B0500ADD8D6 /* dy_button.mp3 */; };
+		9E428A4C2D168B2900ADD8D6 /* dy_tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9E428A4B2D168B2900ADD8D6 /* dy_tap.mp3 */; };
+		9E428A522D168C1400ADD8D6 /* dy_fail.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9E428A512D168C1400ADD8D6 /* dy_fail.mp3 */; };
 		9EFEA7112D135139004DAC9A /* DYBackgroundNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFEA7102D135138004DAC9A /* DYBackgroundNode.swift */; };
 		9EFEA7132D136A74004DAC9A /* DYTimerProgressNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFEA7122D136A74004DAC9A /* DYTimerProgressNode.swift */; };
 		9EFEA7C42D138503004DAC9A /* Baloo2-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EFEA7BA2D138503004DAC9A /* Baloo2-Bold.ttf */; };
@@ -68,6 +74,12 @@
 		046ED32A2D0428E800BA9AE3 /* DYPlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYPlayerNode.swift; sourceTree = "<group>"; };
 		046ED3322D04293E00BA9AE3 /* DYTargetCircleNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYTargetCircleNode.swift; sourceTree = "<group>"; };
 		625BF1852D03F6E300F6DFC5 /* DYLayoutInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYLayoutInfo.swift; sourceTree = "<group>"; };
+		9E428A3C2D1689DE00ADD8D6 /* DYSoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYSoundManager.swift; sourceTree = "<group>"; };
+		9E428A3E2D168A6500ADD8D6 /* dy_bg_music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dy_bg_music.mp3; sourceTree = "<group>"; };
+		9E428A412D168AAD00ADD8D6 /* dy_condition_whistle.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dy_condition_whistle.mp3; sourceTree = "<group>"; };
+		9E428A472D168B0500ADD8D6 /* dy_button.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dy_button.mp3; sourceTree = "<group>"; };
+		9E428A4B2D168B2900ADD8D6 /* dy_tap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dy_tap.mp3; sourceTree = "<group>"; };
+		9E428A512D168C1400ADD8D6 /* dy_fail.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dy_fail.mp3; sourceTree = "<group>"; };
 		9EFEA7102D135138004DAC9A /* DYBackgroundNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYBackgroundNode.swift; sourceTree = "<group>"; };
 		9EFEA7122D136A74004DAC9A /* DYTimerProgressNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYTimerProgressNode.swift; sourceTree = "<group>"; };
 		9EFEA7BA2D138503004DAC9A /* Baloo2-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Baloo2-Bold.ttf"; sourceTree = "<group>"; };
@@ -172,6 +184,7 @@
 		04056B032CCA136B0041B608 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				9E428A402D168A6D00ADD8D6 /* Audio */,
 				9EFEA8282D13A7CF004DAC9A /* Fonts */,
 				04056ADC2CCA13380041B608 /* Assets.xcassets */,
 			);
@@ -192,6 +205,7 @@
 		04056B0E2CCA15920041B608 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				9E428A3C2D1689DE00ADD8D6 /* DYSoundManager.swift */,
 				9EFEA7DA2D13905C004DAC9A /* DYGameInfo.swift */,
 				625BF1852D03F6E300F6DFC5 /* DYLayoutInfo.swift */,
 			);
@@ -212,6 +226,18 @@
 				046ED31C2D0410D600BA9AE3 /* DYConditionNode.swift */,
 			);
 			path = Nodes;
+			sourceTree = "<group>";
+		};
+		9E428A402D168A6D00ADD8D6 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				9E428A3E2D168A6500ADD8D6 /* dy_bg_music.mp3 */,
+				9E428A412D168AAD00ADD8D6 /* dy_condition_whistle.mp3 */,
+				9E428A4B2D168B2900ADD8D6 /* dy_tap.mp3 */,
+				9E428A512D168C1400ADD8D6 /* dy_fail.mp3 */,
+				9E428A472D168B0500ADD8D6 /* dy_button.mp3 */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 		9EFEA7C32D138503004DAC9A /* Baloo_2 */ = {
@@ -348,11 +374,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E428A522D168C1400ADD8D6 /* dy_fail.mp3 in Resources */,
+				9E428A422D168AAD00ADD8D6 /* dy_condition_whistle.mp3 in Resources */,
+				9E428A3F2D168A6500ADD8D6 /* dy_bg_music.mp3 in Resources */,
 				04056ADD2CCA13380041B608 /* Assets.xcassets in Resources */,
+				9E428A4C2D168B2900ADD8D6 /* dy_tap.mp3 in Resources */,
 				9EFEA7C42D138503004DAC9A /* Baloo2-Bold.ttf in Resources */,
 				9EFEA7C62D138503004DAC9A /* Baloo2-Medium.ttf in Resources */,
 				9EFEA7C82D138503004DAC9A /* Baloo2-ExtraBold.ttf in Resources */,
 				9EFEA7C92D138503004DAC9A /* Baloo2-Regular.ttf in Resources */,
+				9E428A482D168B0500ADD8D6 /* dy_button.mp3 in Resources */,
 				9EFEA7CA2D138503004DAC9A /* Baloo2-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -383,6 +414,7 @@
 				625BF28A2D0545A200F6DFC5 /* DYGameScene.swift in Sources */,
 				046ED31D2D0410D900BA9AE3 /* DYConditionNode.swift in Sources */,
 				046ED32B2D0428EC00BA9AE3 /* DYPlayerNode.swift in Sources */,
+				9E428A3D2D1689E200ADD8D6 /* DYSoundManager.swift in Sources */,
 				046ED3332D04294400BA9AE3 /* DYTargetCircleNode.swift in Sources */,
 				046ED3272D0428C300BA9AE3 /* DYCircleTrackNode.swift in Sources */,
 				04056B0A2CCA13960041B608 /* GameType.swift in Sources */,

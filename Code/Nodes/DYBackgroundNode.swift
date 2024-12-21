@@ -68,12 +68,8 @@ class DYBackgroundNode: SKNode {
         let fadeToNight = SKAction.fadeAlpha(to: 0.0, duration: cycleDuration / 2)
         fadeToNight.timingMode = .easeInEaseOut
         
-        let switchToDay = SKAction.run {
-            // Optional: Add any additional logic when switching to day
-        }
-        let switchToNight = SKAction.run {
-            // Optional: Add any additional logic when switching to night
-        }
+        let switchToDay = SKAction.run {        }
+        let switchToNight = SKAction.run {        }
         
         let animateMoonDownAndSunUp = SKAction.run { [weak self] in
             guard let self = self, let moon = self.moonNode, let sun = self.sunNode else { return }

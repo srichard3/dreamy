@@ -87,6 +87,9 @@ class DYGameScene: SKScene {
     
     
     func enterStarting(animateStart: Bool) {
+        DYSoundManager.shared.playBackgroundMusic(named: "dy_bg_music")
+        DYSoundManager.shared.setBackgroundMusicVolume(0.2)
+        
         if animateStart {
             showStartScreen()
         } else {
@@ -160,73 +163,75 @@ class DYGameScene: SKScene {
     
     
     func startTutorial() {
-           startNode?.removeFromParent()
-           gameInfo.updateGameStatus(.tutorial)
+       startNode?.removeFromParent()
+       gameInfo.updateGameStatus(.tutorial)
 
-           circleTrackNode = DYCircleTrackNode(
-               radius: layoutInfo.circleTrackRadius,
-               lineWidth: layoutInfo.circleTrackLineWidth,
-               color: UIColor(hex: "#CED2F9")
-           )
-           let circleTrackNodeSideLength = (layoutInfo.circleTrackRadius + circleTrackNode.lineWidth) * 2
-           circleTrackNode.position = layoutInfo.circleTrackNodePosition
-           circleTrackNode.zPosition = 1
-           circleTrackNode.setScale(0.8)
-           circleTrackNode.alpha = 0
-           addChild(circleTrackNode)
-           circleTrackNode.animateIn(duration: 0.5)
+       circleTrackNode = DYCircleTrackNode(
+           radius: layoutInfo.circleTrackRadius,
+           lineWidth: layoutInfo.circleTrackLineWidth,
+           color: UIColor(hex: "#CED2F9")
+       )
+       let circleTrackNodeSideLength = (layoutInfo.circleTrackRadius + circleTrackNode.lineWidth) * 2
+       circleTrackNode.position = layoutInfo.circleTrackNodePosition
+       circleTrackNode.zPosition = 1
+       circleTrackNode.setScale(0.8)
+       circleTrackNode.alpha = 0
+       addChild(circleTrackNode)
+       circleTrackNode.animateIn(duration: 0.5)
 
-           movingIndicatorNode = DYPlayerNode(
-               circleRadius: layoutInfo.circleTrackRadius,
-               circleTrackLineWidth: layoutInfo.circleTrackLineWidth
-           )
-           movingIndicatorNode.position = layoutInfo.playerNodePosition
-           movingIndicatorNode.zPosition = circleTrackNode.zPosition + 2
-           movingIndicatorNode.alpha = 0
-           movingIndicatorNode.setScale(0.8)
-           circleTrackNode.addChild(movingIndicatorNode)
-           movingIndicatorNode.animateIn(duration: 0.5, delay: 0.5)
+       movingIndicatorNode = DYPlayerNode(
+           circleRadius: layoutInfo.circleTrackRadius,
+           circleTrackLineWidth: layoutInfo.circleTrackLineWidth
+       )
+       movingIndicatorNode.position = layoutInfo.playerNodePosition
+       movingIndicatorNode.zPosition = circleTrackNode.zPosition + 2
+       movingIndicatorNode.alpha = 0
+       movingIndicatorNode.setScale(0.8)
+       circleTrackNode.addChild(movingIndicatorNode)
+       movingIndicatorNode.animateIn(duration: 0.5, delay: 0.5)
 
-           conditionNode = DYConditionNode(layoutInfo: layoutInfo)
-           conditionNode.position = .zero
-           circleTrackNode.addChild(conditionNode)
-           
-           // Setup a tutorial overlay node
-           tutorialOverlayNode = SKSpriteNode(imageNamed: "dy_ice_tutorial")
-           tutorialOverlayNode?.zPosition = 10
-           tutorialOverlayNode?.alpha = 0
-           tutorialOverlayNode?.setScale(0.0)
-           circleTrackNode.addChild(tutorialOverlayNode!)
-           
-           run(SKAction.sequence([
-               SKAction.wait(forDuration: 1.0),
-               SKAction.run { [weak self] in
-                   self?.showNextTutorialCondition()
-               }
-           ]))
-       }
+       conditionNode = DYConditionNode(layoutInfo: layoutInfo)
+       conditionNode.position = .zero
+       circleTrackNode.addChild(conditionNode)
+       
+       tutorialOverlayNode = SKSpriteNode(imageNamed: "dy_ice_tutorial")
+       tutorialOverlayNode?.zPosition = 10
+       tutorialOverlayNode?.alpha = 0
+       tutorialOverlayNode?.setScale(0.0)
+       circleTrackNode.addChild(tutorialOverlayNode!)
+       
+       run(SKAction.sequence([
+           SKAction.wait(forDuration: 1.0),
+           SKAction.run { [weak self] in
+               self?.showNextTutorialCondition()
+           }
+       ]))
+    }
     
     private func showNextTutorialCondition() {
-           guard currentTutorialIndex < tutorialConditions.count else {
-               didShowTutorial = true
-               
-               circleTrackNode?.removeFromParent()
-               movingIndicatorNode?.removeFromParent()
-               conditionNode?.removeFromParent()
-               
-               tutorialOverlayNode?.removeFromParent()
-               tutorialOverlayNode = nil
-               tutorialLabel?.removeFromParent()
-               tutorialLabel = nil
-               
-               conditionNode.conditionType = .none
-               conditionNode.updateConditionForCurrentWeather()
-               
-               startGame()
-               return
-           }
+        guard currentTutorialIndex < tutorialConditions.count else {
+            didShowTutorial = true
 
-           tutorialShowingTapToContinue = false
+            circleTrackNode?.removeFromParent()
+            movingIndicatorNode?.removeFromParent()
+            conditionNode?.removeFromParent()
+
+            tutorialOverlayNode?.removeFromParent()
+            tutorialOverlayNode = nil
+            tutorialLabel?.removeFromParent()
+            tutorialLabel = nil
+
+            conditionNode.conditionType = .none
+            conditionNode.updateConditionForCurrentWeather()
+
+            startGame()
+            return
+        }
+
+        tutorialShowingTapToContinue = false
+        
+        let soundAction = SKAction.playSoundFileNamed("dy_condition_whistle.mp3", waitForCompletion: false)
+        run(soundAction)
 
            let condition = tutorialConditions[currentTutorialIndex]
            conditionNode.conditionType = condition
@@ -280,7 +285,6 @@ class DYGameScene: SKScene {
         tutorialLabel?.removeFromParent()
         tutorialLabel = nil
         
-        // Reset condition so no effects carry over to next tutorial step
         conditionNode.conditionType = .none
         conditionNode.updateConditionForCurrentWeather()
     }
@@ -368,6 +372,8 @@ class DYGameScene: SKScene {
     
     func gameOver() {
         errorFeedbackGenerator.notificationOccurred(.error)
+        let soundAction = SKAction.playSoundFileNamed("dy_fail.mp3", waitForCompletion: false)
+        run(soundAction)
 
         gameInfo.updateGameStatus(.gameOver)
         timerProgressNode.stopCountdown()
@@ -386,13 +392,11 @@ class DYGameScene: SKScene {
             updateMovingIndicatorPosition()
         }
         else if gameInfo.currentGameStatus == .tutorial {
-            // Move the indicator as normal but no game logic for targets/score
             updateMovingIndicatorPositionForTutorial()
         }
     }
     
     private func updateMovingIndicatorPositionForTutorial() {
-        // Apply condition effects here so the player sees the impact
         var speed = DYLayoutInfo.baseSpeed
         
         let currentAngle = normalizeAngle(gameInfo.progress * 360)
@@ -418,20 +422,16 @@ class DYGameScene: SKScene {
     }
     
     private func updateProgress() {
-        /// set speed of moving indicator
         var speed = isReverse ? -DYLayoutInfo.baseSpeed : DYLayoutInfo.baseSpeed
         let speedMultiplier = 1.0 + (Double(gameInfo.score) * DYLayoutInfo.speedUpMultiplier)
         speed *= speedMultiplier
 
-        /// conditions turn on after 5 points
         if conditionNode.conditionType != .none && isTouchingConditionNode {
             speed = conditionNode.applyConditionEffects(progress: speed)
         }
         
-        /// move distance of speed
         gameInfo.progress += speed
 
-        /// Ensure progress stays within 0-1 range
         gameInfo.progress = gameInfo.progress.truncatingRemainder(dividingBy: 1.0)
         if gameInfo.progress < 0 {
             gameInfo.progress += 1.0
@@ -471,6 +471,8 @@ class DYGameScene: SKScene {
         } else if gameInfo.currentGameStatus == .tutorial {
             if tutorialShowingTapToContinue {
                 tapFeedbackGenerator.impactOccurred()
+                let soundAction = SKAction.playSoundFileNamed("dy_button.mp3", waitForCompletion: false)
+                run(soundAction)
                 
                 hideCurrentCondition()
                 currentTutorialIndex += 1
@@ -490,11 +492,15 @@ class DYGameScene: SKScene {
     
     private func handleSuccessfulTap() {
         successFeedbackGenerator.notificationOccurred(.success)
+        let soundAction = SKAction.playSoundFileNamed("dy_tap.mp3", waitForCompletion: false)
+        run(soundAction)
 
         gameInfo.updateScore(1)
         scoreNode.updateScore(to: gameInfo.score)
         if gameInfo.score % DYLayoutInfo.minimumConditionScore == 0 {
             conditionNode.randomizeAppearance()
+            let soundAction = SKAction.playSoundFileNamed("dy_condition_whistle.mp3", waitForCompletion: false)
+            run(soundAction)
         }
         
         isReverse.toggle()
@@ -509,7 +515,7 @@ class DYGameScene: SKScene {
         
         let absoluteSpeed = abs(currentSpeed)
         
-        let totalTime = (4.0 / absoluteSpeed) / 60.0 // seconds
+        let totalTime = (4.0 / absoluteSpeed) / 60.0
         
         timerProgressNode?.setTotalTime(totalTime)
         timerProgressNode?.resetCountdown()
@@ -557,10 +563,8 @@ class DYGameScene: SKScene {
     }
     
     private func showFogTargetIndicator(at position: CGPoint, radius: CGFloat) {
-        // Avoid creating multiple indicators
-        print("here")
         guard fogTargetIndicatorNode == nil else { return }
-        print("there")
+        
         let indicator = SKShapeNode(circleOfRadius: radius)
         indicator.strokeColor = UIColor(hex: "#FFCF69")
         indicator.lineWidth = 2
@@ -578,19 +582,13 @@ class DYGameScene: SKScene {
     }
     
     private func updateFogTargetIndicator() {
-        // Calculate the target's current angle
         let targetAngle = normalizeAngle(randomNodeAngle)
         
-        // Check if the current condition is fog and the target is within the fog range
         if conditionNode.conditionType == .fog && conditionNode.isAngleInRange(Double(targetAngle), start: Double(conditionNode.startAngle)) {
-            print("covered!")
-            // Determine the radius for the indicator (slightly larger than the target)
             let indicatorRadius = targetNode.frame.width / 2 + 4
             
-            // Show the indicator
             showFogTargetIndicator(at: targetNode.position, radius: indicatorRadius)
         } else {
-            // Remove the indicator if conditions are not met
             removeFogTargetIndicator()
         }
     }

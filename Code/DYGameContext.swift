@@ -22,13 +22,13 @@ class DYGameContext: GameContext {
         super.init(dependencies: dependencies)
         self.scene = DYGameScene(context: self, size: UIScreen.main.bounds.size)
         
+        _ = DYSoundManager.shared // preload
+        
         configureLayoutInfo()
     }
     
     func configureLayoutInfo() {
         let screenSize = UIScreen.main.bounds.size
-        print(screenSize)
-        print(screenSize.width * 0.340909091)
 
         layoutInfo.circleTrackRadius = screenSize.width * 0.340909091
         layoutInfo.circleTrackLineWidth = layoutInfo.circleTrackRadius * 1/3
